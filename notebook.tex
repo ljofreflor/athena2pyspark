@@ -1,0 +1,554 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{demo}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \section{athena2pyspark}\label{athena2pyspark}
+
+Usted está frente athena2pyspark una api creada por exalítica para la
+manipulación de consultas en sql desde s3 basado en athena.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} \PY{k+kn}{import} \PY{n+nn}{athena2pyspark} \PY{c+c1}{\PYZsh{} se demora un poco porque esta creado el SparkContext}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{k+kn}{from} \PY{n+nn}{athena2pyspark}\PY{n+nn}{.}\PY{n+nn}{athena\PYZus{}sql}\PY{n+nn}{.}\PY{n+nn}{producto\PYZus{}nuevo} \PY{k}{import} \PY{n}{producto\PYZus{}nuevo}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{producto\PYZus{}nuevo}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}9}]:} "\textbackslash{}nWITH fuente\_filtrada AS\textbackslash{}n(\textbackslash{}nwith items\_filtrado AS (\textbackslash{}n    SELECT DISTINCT item\_hash.item\_id\textbackslash{}n    FROM prod\_jumbo.item\_hash\textbackslash{}n    WHERE item\_hash.item\_subclass\_cd = 110209\textbackslash{}n            OR item\_hash.brand\_cd = '2717')\textbackslash{}nSELECT fuente.party\_id, fuente.tran\_start\_dt, fuente.item\_id from fuente join items\_filtrado\textbackslash{}non fuente.item\_id = items\_filtrado.item\_id\textbackslash{}n  where cast(fuente.party\_id as integer) > 0\textbackslash{}n)\textbackslash{}n\textbackslash{}n-- select count(*) from fuente\_filtrada 35 929 589\textbackslash{}n\textbackslash{}n,\textbackslash{}nsubclasepop AS\textbackslash{}n(\textbackslash{}n  SELECT fuente\_filtrada.party\_id,\textbackslash{}n         item\_hash.item\_subclass\_cd,\textbackslash{}n         COUNT(DISTINCT (fuente\_filtrada.tran\_start\_dt)) AS visitas\textbackslash{}n  FROM fuente\_filtrada\textbackslash{}n    LEFT JOIN item\_hash ON (fuente\_filtrada.item\_id = item\_hash.item\_id)\textbackslash{}n  GROUP BY fuente\_filtrada.party\_id,\textbackslash{}n           item\_hash.item\_subclass\_cd\textbackslash{}n)\textbackslash{}n\textbackslash{}n-- select count(*) from subclasepop 15867270\textbackslash{}n\textbackslash{}n,\textbackslash{}nmarcapop AS\textbackslash{}n(\textbackslash{}n  SELECT fuente\_filtrada.party\_id,\textbackslash{}n         item\_hash.brand\_cd,\textbackslash{}n         COUNT(DISTINCT (fuente\_filtrada.tran\_start\_dt)) AS visitas\textbackslash{}n  FROM fuente\_filtrada\textbackslash{}n    LEFT JOIN item\_hash ON (fuente\_filtrada.item\_id = item\_hash.item\_id)\textbackslash{}n  GROUP BY fuente\_filtrada.party\_id,\textbackslash{}n           item\_hash.brand\_cd\textbackslash{}n)\textbackslash{}n\textbackslash{}n-- select count(*) from marcapop 2336032\textbackslash{}n,\textbackslash{}npobsubclase AS\textbackslash{}n(\textbackslash{}n  SELECT subclasepop.party\_id,\textbackslash{}n         subclasepop.visitas / b.visitasprom AS lift\_subclase\textbackslash{}n  FROM subclasepop\textbackslash{}n    LEFT JOIN (SELECT subclasepop.item\_subclass\_cd,\textbackslash{}n                      AVG(subclasepop.visitas) AS visitasprom\textbackslash{}n               FROM subclasepop\textbackslash{}n               GROUP BY 1) AS b ON subclasepop.item\_subclass\_cd = b.item\_subclass\_cd\textbackslash{}n  \textbackslash{}n  where subclasepop.item\_subclass\_cd=110209\textbackslash{}n)\textbackslash{}n-- select count(*) from pobsubclase 15867270\textbackslash{}n\textbackslash{}n,\textbackslash{}npobmarca AS\textbackslash{}n(\textbackslash{}n  -- metrica poblacionales marca\textbackslash{}n  SELECT marcapop.party\_id,\textbackslash{}n         marcapop.visitas / b.visitasprom AS lift\_marca\textbackslash{}n  FROM marcapop\textbackslash{}n    LEFT JOIN (SELECT marcapop.brand\_cd,\textbackslash{}n                      AVG(marcapop.visitas) AS visitasprom\textbackslash{}n               FROM marcapop\textbackslash{}n               GROUP BY 1) AS b ON marcapop.brand\_cd = b.brand\_cd\textbackslash{}n  \textbackslash{}n  where marcapop.brand\_cd='2717'\textbackslash{}n  \textbackslash{}n)\textbackslash{}n\textbackslash{}n,\textbackslash{}nlift\textbackslash{}nas (\textbackslash{}nSELECT pobsubclase.party\_id,\textbackslash{}n       pobsubclase.lift\_subclase,\textbackslash{}n       pobmarca.lift\_marca,\textbackslash{}n       pobsubclase.lift\_subclase*pobmarca.lift\_marca AS lift\_afinidad\textbackslash{}nFROM pobsubclase\textbackslash{}n  JOIN pobmarca ON pobsubclase.party\_id = pobmarca.party\_id\textbackslash{}n  order by 4 desc)\textbackslash{}n,\textbackslash{}ncontact as\textbackslash{}n(\textbackslash{}n  select party\_id,  jumbo\_cl\_ind\_email from clientes where ju\_mail=1\textbackslash{}n  )\textbackslash{}n  \textbackslash{}n  ,\textbackslash{}n  listado as \textbackslash{}n  (\textbackslash{}n  \textbackslash{}nselect a.*,b.jumbo\_cl\_ind\_email from lift as a left join contact as b on a.party\_id=cast(b.party\_id as varchar) where b.party\_id is not null\textbackslash{}n  )\textbackslash{}n  -- select count(*) from listado 108196\textbackslash{}n   \textbackslash{}t-- 76506\textbackslash{}n -- select count(*) from lift  -- 304730\textbackslash{}n ,\textbackslash{}n list\_form as (\textbackslash{}n select party\_id ,\textbackslash{}n         '300' as promo\_id,\textbackslash{}n          1 as  comm\_channel\_cd,\textbackslash{}n         'PopCorn' as codigo\_siebel,\textbackslash{}n          '300' as codigo\_motor,\textbackslash{}n          1 as communication\_id,\textbackslash{}n          1 as page\_id,\textbackslash{}n          jumbo\_cl\_ind\_email as datos\_de\_contacto,\textbackslash{}n          61009 as correlativo,\textbackslash{}n   CASE WHEN rand()<= 0.05 then 1 else 0 end grupo\textbackslash{}n          from listado where lift\_afinidad>2.25\textbackslash{}n  )\textbackslash{}n  \textbackslash{}n  select count(*), sum(grupo) from list\_form"
+\end{Verbatim}
+            
+    \section{Hacer una query y que te retorne un
+dataframe}\label{hacer-una-query-y-que-te-retorne-un-dataframe}
+
+Podemos usar los recursos de athena para obtener querys basado en sql,
+esto nos permite hacer querys gigantes de forma server-less
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{n}{s3\PYZus{}output} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{s3://leonardo.exalitica.com/boto3/query\PYZus{}1/}\PY{l+s+s2}{\PYZdq{}}
+        \PY{n}{df} \PY{o}{=} \PY{n}{ath}\PY{o}{.}\PY{n}{run\PYZus{}query}\PY{p}{(}\PY{n}{query} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{select * from baul\PYZus{}2 limit 1000}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{database} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ljofre}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{s3\PYZus{}output} \PY{o}{=} \PY{n}{s3\PYZus{}output}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        AttributeError                            Traceback (most recent call last)
+
+        <ipython-input-2-b606402509fc> in <module>()
+          1 s3\_output = "s3://leonardo.exalitica.com/boto3/query\_1/"
+    ----> 2 df = ath.run\_query(query = "select * from baul\_2 limit 1000", database = "ljofre", s3\_output = s3\_output)
+    
+
+        AttributeError: module 'athena2pyspark' has no attribute 'run\_query'
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{df}\PY{o}{.}\PY{n}{toPandas}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{100}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}13}]:}      party\_id   corr  cv\_us  cv\_u4s  cv\_u12s       m\_us       m\_u4s  \textbackslash{}
+         0   100183795   1875      0       1        1     0.0000    467.2269   
+         1   100189452   7820      0       0        2     0.0000      0.0000   
+         2   100384605   3472      0       1        3     0.0000   2335.2941   
+         3   100390335  20113      0       1        1     0.0000   2436.1345   
+         4   100581556  31907      0       1        1     0.0000   2512.6050   
+         5   100588408    265      0       0        1     0.0000      0.0000   
+         6   100783295   3337      0       1        2     0.0000    586.5546   
+         7   100794944   1426      0       0        2     0.0000      0.0000   
+         8   100981604   2637      0       1        4     0.0000  11138.6554   
+         9   100991407  33684      0       1        1     0.0000   2008.4034   
+         10  101172792   2276      0       1        1     0.0000    502.5210   
+         11  101170639  23457      0       0        1     0.0000      0.0000   
+         12  101380115  23554      1       1        1  2764.7059   2764.7059   
+         13  101369194    276      0       1        1     0.0000    274.7898   
+         14  101571105  26479      0       0        1     0.0000      0.0000   
+         15  101565750   7806      0       0        1     0.0000      0.0000   
+         16  101767282  19809      0       1        1     0.0000   1511.7647   
+         17  101785708  31325      0       1        1     0.0000   2428.5714   
+         18  101963929  19957      1       1        1  2233.6134   2233.6134   
+         19  101983643  11615      0       0        1     0.0000      0.0000   
+         20  102170575  21747      0       0        1     0.0000      0.0000   
+         21  102188992    236      0       1        1     0.0000   1679.8319   
+         22  102370166  19843      0       0        1     0.0000      0.0000   
+         23  102392471   2297      0       0        1     0.0000      0.0000   
+         24  102572949  20819      0       2        4     0.0000   7400.5042   
+         25  102593916  33337      0       0        1     0.0000      0.0000   
+         26  102766289  12959      0       0        1     0.0000      0.0000   
+         27  102792468  27793      0       0        1     0.0000      0.0000   
+         28  102966948   2730      0       0        2     0.0000      0.0000   
+         29  102978286   2840      1       4        7   629.4118   3103.3613   
+         ..        {\ldots}    {\ldots}    {\ldots}     {\ldots}      {\ldots}        {\ldots}         {\ldots}   
+         70  107099993  28718      0       1        1     0.0000    469.7479   
+         71  107130582  11705      0       0        1     0.0000      0.0000   
+         72  107278820  33437      0       1        1     0.0000   1692.4369   
+         73  107315881   1039      0       0        2     0.0000      0.0000   
+         74  107471059   4575      0       0        1     0.0000      0.0000   
+         75  107511563   1832      0       0        1     0.0000      0.0000   
+         76  107671616  28718      0       0        1     0.0000      0.0000   
+         77  107709145  11513      0       1        2     0.0000  10033.6134   
+         78  107866007  28093      0       0        1     0.0000      0.0000   
+         79  107894219   3986      0       0        1     0.0000      0.0000   
+         80  108070924  26282      0       0        1     0.0000      0.0000   
+         81  108084360  29284      0       0        1     0.0000      0.0000   
+         82  108269143   8023      0       1        4     0.0000    503.3613   
+         83  108280220   1926      0       0        1     0.0000      0.0000   
+         84  108457676   2876      0       1        1     0.0000   1214.5658   
+         85  108482779  33283      0       2        8     0.0000   1538.6552   
+         86  108666899  29304      0       1        1     0.0000   7554.6218   
+         87  108691348   2788      0       2        3     0.0000   4189.9158   
+         88  108873916   2789      0       1        2     0.0000   1747.0588   
+         89  108877778    444      0       1        2     0.0000   2873.1092   
+         90  109068324  37879      0       0        1     0.0000      0.0000   
+         91  109069919  21327      0       0        1     0.0000      0.0000   
+         92  109278964   1253      0       0        1     0.0000      0.0000   
+         93  109283091  19822      0       0        1     0.0000      0.0000   
+         94  109480282  28490      0       0        1     0.0000      0.0000   
+         95  109492510   1784      0       0        3     0.0000      0.0000   
+         96  109660082  20276      0       1        1     0.0000   1007.5630   
+         97  109676022  11646      0       1        1     0.0000   1420.1681   
+         98  109857883   3757      0       0        1     0.0000      0.0000   
+         99  109874256   1954      0       1        1     0.0000   1005.8823   
+         
+                 m\_u12s  cp\_us  cp\_u4s  cp\_u12s   rec  tu4s      tu12s   n\_key  
+         0     467.2269    0.0   4.000    4.000  23.0  30.0  90.000000  2016\_1  
+         1    2268.0672    0.0   0.000    5.000  36.0  30.0  50.000000  2016\_1  
+         2    9475.6302    0.0   1.000    4.000  19.0  30.0  30.500000  2016\_1  
+         3    2436.1345    0.0   1.000    1.000  21.0  30.0  90.000000  2016\_1  
+         4    2512.6050    0.0   1.000    1.000  25.0  30.0  90.000000  2016\_1  
+         5    1612.6050    0.0   0.000    0.240  75.0  30.0  90.000000  2016\_1  
+         6    1189.9159    0.0   2.000    4.000  23.0  30.0  60.000000  2016\_1  
+         7    3233.6135    0.0   0.000    2.000  59.0  30.0  22.000000  2016\_1  
+         8   51860.5039    0.0   0.942    4.185  20.0  30.0  15.333333  2016\_1  
+         9    2008.4034    0.0   1.000    1.000  18.0  30.0  90.000000  2016\_1  
+         10    502.5210    0.0   2.000    2.000  15.0  30.0  90.000000  2016\_1  
+         11   1679.8319    0.0   0.000    1.000  82.0  30.0  90.000000  2016\_1  
+         12   2764.7059    1.0   1.000    1.000  13.0  30.0  90.000000  2016\_1  
+         13    274.7898    0.0   0.095    0.095  33.0  30.0  90.000000  2016\_1  
+         14  15749.5798    0.0   0.000    1.000  64.0  30.0  90.000000  2016\_1  
+         15    587.3950    0.0   0.000    1.000  62.0  30.0  90.000000  2016\_1  
+         16   1511.7647    0.0   2.000    2.000  27.0  30.0  90.000000  2016\_1  
+         17   2428.5714    0.0   1.000    1.000  20.0  30.0  90.000000  2016\_1  
+         18   2233.6134    2.0   2.000    2.000   9.0  30.0  90.000000  2016\_1  
+         19   1000.0000    0.0   0.000    1.000  43.0  30.0  90.000000  2016\_1  
+         20   1109.2437    0.0   0.000    1.000  91.0  30.0  90.000000  2016\_1  
+         21   1679.8319    0.0   1.000    1.000  29.0  30.0  90.000000  2016\_1  
+         22    780.6723    0.0   0.000    1.000  83.0  30.0  90.000000  2016\_1  
+         23  11691.0363    0.0   0.000    3.135  38.0  30.0  90.000000  2016\_1  
+         24  14799.1036    0.0   2.000    4.000  21.0  12.0  15.000000  2016\_1  
+         25    445.3781    0.0   0.000    0.515  81.0  30.0  90.000000  2016\_1  
+         26   2490.7563    0.0   0.000    1.000  70.0  30.0  90.000000  2016\_1  
+         27   2015.9664    0.0   0.000    1.000  39.0  30.0  90.000000  2016\_1  
+         28   3842.0166    0.0   0.000    3.680  49.0  30.0  31.000000  2016\_1  
+         29   4987.0588    1.0   4.451    7.451  12.0   6.0  13.166667  2016\_1  
+         ..         {\ldots}    {\ldots}     {\ldots}      {\ldots}   {\ldots}   {\ldots}        {\ldots}     {\ldots}  
+         70    469.7479    0.0   1.000    1.000  27.0  30.0  90.000000  2016\_1  
+         71   6201.6806    0.0   0.000    2.000  80.0  30.0  90.000000  2016\_1  
+         72   1692.4369    0.0   0.230    0.230  19.0  30.0  90.000000  2016\_1  
+         73   3778.9916    0.0   0.000    3.000  46.0  30.0  10.000000  2016\_1  
+         74    553.7815    0.0   0.000    1.000  48.0  30.0  90.000000  2016\_1  
+         75   1646.2185    0.0   0.000    1.000  43.0  30.0  90.000000  2016\_1  
+         76    939.4958    0.0   0.000    2.000  58.0  30.0  90.000000  2016\_1  
+         77  15255.4622    0.0   6.000   10.000  32.0  30.0  26.000000  2016\_1  
+         78   1852.1007    0.0   0.000    0.315  46.0  30.0  90.000000  2016\_1  
+         79    889.0756    0.0   0.000    2.000  37.0  30.0  90.000000  2016\_1  
+         80   1888.2352    0.0   0.000    0.814  42.0  30.0  90.000000  2016\_1  
+         81   4193.2773    0.0   0.000    1.000  42.0  30.0  90.000000  2016\_1  
+         82   2055.4621    0.0   1.000    4.000  29.0  30.0  15.333333  2016\_1  
+         83    940.3362    0.0   0.000    6.000  89.0  30.0  90.000000  2016\_1  
+         84   1214.5658    0.0   1.000    1.000  35.0  30.0  90.000000  2016\_1  
+         85   9797.4781    0.0   1.540    7.280  24.0   5.0   8.571429  2016\_1  
+         86   7554.6218    0.0   1.000    1.000  34.0  30.0  90.000000  2016\_1  
+         87   7458.8234    0.0   5.036    6.036  22.0   7.0  24.500000  2016\_1  
+         88   2112.0447    0.0   2.000    3.000  18.0  30.0  42.000000  2016\_1  
+         89   4452.1008    0.0   1.000    2.000  34.0  30.0  23.000000  2016\_1  
+         90  16798.3193    0.0   0.000    1.000  70.0  30.0  90.000000  2016\_1  
+         91   1049.5798    0.0   0.000    1.000  48.0  30.0  90.000000  2016\_1  
+         92    587.3950    0.0   0.000    1.000  58.0  30.0  90.000000  2016\_1  
+         93   1982.3529    0.0   0.000    1.000  44.0  30.0  90.000000  2016\_1  
+         94   1057.9832    0.0   0.000    1.000  88.0  30.0  90.000000  2016\_1  
+         95   4884.8366    0.0   0.000   14.000  71.0  30.0   6.500000  2016\_1  
+         96   1007.5630    0.0   1.000    1.000  18.0  30.0  90.000000  2016\_1  
+         97   1420.1681    0.0   1.000    1.000  25.0  30.0  90.000000  2016\_1  
+         98    390.0560    0.0   0.000    1.000  58.0  30.0  90.000000  2016\_1  
+         99   1005.8823    0.0   3.000    3.000  27.0  30.0  90.000000  2016\_1  
+         
+         [100 rows x 15 columns]
+\end{Verbatim}
+            
+    \section{Generar el "create table" a partir del dataframe ya
+creado}\label{generar-el-create-table-a-partir-del-dataframe-ya-creado}
+
+Es util registrar este dataframe dentro de un catálogo para poder seguir
+haciendo consultas dentro de athena
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{s3\PYZus{}input} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{s3://leonardo.exalitica.com/boto3/query\PYZus{}1/8da33860\PYZhy{}e60e\PYZhy{}42a9\PYZhy{}9e83\PYZhy{}79120a4a7c95.csv}\PY{l+s+s2}{\PYZdq{}}
+        \PY{n}{create\PYZus{}database}\PY{p}{,} \PY{n}{create\PYZus{}table} \PY{o}{=} \PY{n}{ath}\PY{o}{.}\PY{n}{get\PYZus{}ddl}\PY{p}{(}\PY{n}{df}\PY{o}{=}\PY{n}{df}\PY{p}{,}
+                                                    \PY{n}{database}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ljofre}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                                                    \PY{n}{table}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nueva\PYZus{}tabla}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                                                    \PY{n}{s3\PYZus{}input}\PY{o}{=}\PY{n}{s3\PYZus{}input}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}11}]:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{create\PYZus{}database}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+CREATE DATABASE IF NOT EXISTS ljofre;
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}12}]:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{create\PYZus{}table}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+CREATE EXTERNAL TABLE IF NOT EXISTS ljofre.nueva\_tabla ('party\_id' string,'corr' string,'cv\_us' string,'cv\_u4s' string,'cv\_u12s' string,'m\_us' string,'m\_u4s' string,'m\_u12s' string,'cp\_us' string,'cp\_u4s' string,'cp\_u12s' string,'rec' string,'tu4s' string,'tu12s' string,'n\_key' string)
+     ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'
+     WITH SERDEPROPERTIES (
+     'serialization.format' = '1'
+     ) LOCATION 's3://leonardo.exalitica.com/boto3/query\_1/8da33860-e60e-42a9-9e83-79120a4a7c95.csv'
+     TBLPROPERTIES ('has\_encrypted\_data'='false');
+
+    \end{Verbatim}
+
+    \section{Ejecutar create table y dejar registrada la tabla en
+Athena}\label{ejecutar-create-table-y-dejar-registrada-la-tabla-en-athena}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}15}]:} \PY{k+kn}{import} \PY{n+nn}{boto3}
+         \PY{n}{client} \PY{o}{=} \PY{n}{boto3}\PY{o}{.}\PY{n}{client}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{athena}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{region\PYZus{}name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{us\PYZhy{}east\PYZhy{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
+                               \PY{n}{aws\PYZus{}access\PYZus{}key\PYZus{}id}\PY{o}{=}\PY{n}{aws\PYZus{}access\PYZus{}key\PYZus{}id}\PY{p}{,}
+                               \PY{n}{aws\PYZus{}secret\PYZus{}access\PYZus{}key}\PY{o}{=}\PY{n}{aws\PYZus{}secret\PYZus{}access\PYZus{}key}\PY{p}{)}
+         
+         \PY{n}{response} \PY{o}{=} \PY{n}{client}\PY{o}{.}\PY{n}{start\PYZus{}query\PYZus{}execution}\PY{p}{(}
+             \PY{n}{QueryString}\PY{o}{=}\PY{n}{create\PYZus{}table}\PY{p}{,}
+             \PY{n}{QueryExecutionContext}\PY{o}{=}\PY{p}{\PYZob{}}
+                 \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Database}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{database}
+                 \PY{p}{\PYZcb{}}
+             \PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Execution ID: }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{response}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{QueryExecutionId}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        NameError                                 Traceback (most recent call last)
+
+        <ipython-input-15-0bd2e1812e04> in <module>()
+          1 import boto3
+          2 client = boto3.client('athena', region\_name='us-east-1', 
+    ----> 3                       aws\_access\_key\_id=aws\_access\_key\_id,
+          4                       aws\_secret\_access\_key=aws\_secret\_access\_key)
+          5 
+
+
+        NameError: name 'aws\_access\_key\_id' is not defined
+
+    \end{Verbatim}
+
+    \section{Hacer un listado a partir de la
+prepriorizacion}\label{hacer-un-listado-a-partir-de-la-prepriorizacion}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
