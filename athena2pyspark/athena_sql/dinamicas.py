@@ -95,11 +95,6 @@ def producto_nuevo(subclase, marca, lift):
       
     select a.*,b.jumbo_cl_ind_email from lift as a left join contact as b on a.party_id=cast(b.party_id as varchar) where b.party_id is not null
       )
-      -- select count(*) from listado 108196
-       	-- 76506
-     -- select count(*) from lift  -- 304730
-     ,
-     list_form as (
      select party_id ,
              '300' as promo_id,
               1 as  comm_channel_cd,
@@ -110,7 +105,4 @@ def producto_nuevo(subclase, marca, lift):
               jumbo_cl_ind_email as datos_de_contacto,
               61009 as correlativo,
        CASE WHEN rand()<= 0.05 then 1 else 0 end grupo
-              from listado where lift_afinidad>{2}
-      )
-      
-      select count(*), sum(grupo) from list_form""".format(subclase, marca, lift)
+              from listado where lift_afinidad>{2}""".format(subclase, marca, lift)
