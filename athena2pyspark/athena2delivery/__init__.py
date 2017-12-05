@@ -28,6 +28,5 @@ copy_source = {
 
 s3.copy(copy_source, Bucket, 'boto3/prueba_producto_nuevo2/'.replace(FileName[0], "") + file_name + '.csv')
 s3.delete_object(Bucket=Bucket, Key=Key)
-s3.delete_object(Bucket=Bucket, Key=Key + '.metadata')
 
 pass
