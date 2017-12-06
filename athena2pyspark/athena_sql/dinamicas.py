@@ -1,6 +1,7 @@
 
 def producto_nuevo(subclase, marca, lift):   
     return """
+    -- from glue ...
     WITH fuente_filtrada AS
     (
     with items_filtrado AS (

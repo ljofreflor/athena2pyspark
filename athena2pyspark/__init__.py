@@ -20,8 +20,7 @@ def get_dataframe(path_query, spark):
     locales no aceptan el protocolo s3 agregando un ; al final de la url, por lo que manejamos la excepcion
     para ambos casos."""
     
-    while True:
-        
+    while True:  
         try:
             return spark.read.format("com.databricks.spark.csv") \
                 .options(header=True, inferschema=True) \
