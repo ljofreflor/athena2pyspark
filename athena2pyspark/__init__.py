@@ -21,14 +21,18 @@ def get_dataframe(path_query, spark):
     para ambos casos."""
     
     while True:
+        
         try:
             return spark.read.format("com.databricks.spark.csv") \
                 .options(header=True, inferschema=True) \
-                .csv(str(path_query)) # version s3
+                .load(path_query) # version s3
         except AnalysisException:
-            return spark.read.format("com.databricks.spark.csv") \
-                .options(header=True, inferschema=True) \
-                .csv(str(path_query).replace("s3://", "s3n://")) # version s3n
+            try :
+                return spark.read.format("com.databricks.spark.csv") \
+                    .options(header=True, inferschema=True) \
+                    .csv(str(path_query).replace("s3://", "s3n://")) # version s3n
+            except AnalysisException:
+                pass
         except AnalysisException:
             time.sleep(1)
             pass
