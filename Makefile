@@ -1,4 +1,4 @@
-all: library_to_s3 etl_scripts_to_s3 clean
+all: clean library_to_s3 etl_scripts_to_s3
 
 library_to_s3:
 	zip -r athena2pyspark ./athena2pyspark/*
@@ -10,5 +10,5 @@ etl_scripts_to_s3:
 	aws s3 cp --recursive ./etl_scripts s3://leonardo.exalitica.com/etl_scripts/
 
 clean:
-	rm *~
+	find . -name \*~ -delete
 	find . -name \*.pyc -delete
