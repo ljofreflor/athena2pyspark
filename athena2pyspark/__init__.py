@@ -32,6 +32,9 @@ def get_dataframe(path_query, spark):
                     .options(header=True, inferschema=True) \
                     .csv(str(path_query).replace("s3://", "s3n://")) # version s3n
             except AnalysisException:
+                pass
+            
+            except Py4JJavaError:
                 time.sleep(1)
 
 
