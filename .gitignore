@@ -1,3 +1,4 @@
 *~
 athena2pyspark/athena2delivery/__pycache__/
 .ipynb_checkpoints/
+*.pyc
