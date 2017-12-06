@@ -16,19 +16,19 @@ from py4j.protocol import Py4JJavaError
 
 def get_dataframe(path_query, spark):
     
-    """por alguna razon desconocida glue no acepta el protocolo s3n, por otra razon las aplicaciones
-    locales no aceptan el protocolo s3 agregando un ; al final de la url, por lo que manejamos la excepción
+    u"""por alguna razon desconocida glue no acepta el protocolo s3n, por otra razon las aplicaciones
+    locales no aceptan el protocolo s3 agregando un ; al final de la url, por lo que manejamos la excepcion
     para ambos casos."""
     
     while True:
         try:
             return spark.read.format("com.databricks.spark.csv") \
                 .options(header=True, inferschema=True) \
-                .csv(path_query) # version s3
-        except Py4JJavaError:
+                .csv(str(path_query)) # version s3
+        except AnalysisException:
             return spark.read.format("com.databricks.spark.csv") \
                 .options(header=True, inferschema=True) \
-                .csv(path_query.replace("s3://", "s3n://")) # version s3n
+                .csv(str(path_query).replace("s3://", "s3n://")) # version s3n
         except AnalysisException:
             time.sleep(1)
             pass
