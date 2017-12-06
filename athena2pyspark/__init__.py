@@ -32,10 +32,7 @@ def get_dataframe(path_query, spark):
                     .options(header=True, inferschema=True) \
                     .csv(str(path_query).replace("s3://", "s3n://")) # version s3n
             except AnalysisException:
-                pass
-        except AnalysisException:
-            time.sleep(1)
-            pass
+                time.sleep(1)
 
 
 def run_create_table(query, database, s3_output):

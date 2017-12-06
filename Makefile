@@ -1,3 +1,5 @@
+all: library_to_s3 etl_scripts_to_s3 clean
+
 library_to_s3:
 	zip -r athena2pyspark ./athena2pyspark/*
 	aws s3 cp ./athena2pyspark.zip s3://library.exalitica.com/
