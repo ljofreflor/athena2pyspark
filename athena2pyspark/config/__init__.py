@@ -18,4 +18,5 @@ def getLocalSparkSession():
     spark = SparkSession.builder.master("local").getOrCreate()
     spark.conf.set("fs.s3n.awsAccessKeyId", aws_access_key_id)
     spark.conf.set("fs.s3n.awsSecretAccessKey", aws_secret_access_key)
+    
     return spark

@@ -4,7 +4,6 @@ Created on 24-10-2017
 @author: lnjofre
 '''
 
-
 import boto3
 import re
 from  athena2pyspark.config import aws_access_key_id, aws_secret_access_key
@@ -13,15 +12,23 @@ import pyspark
 from pyspark.sql import dataframe
 from pyspark.sql.utils import AnalysisException
 import time
-from athena2pyspark.athena2delivery import s3_output
+from py4j.protocol import Py4JJavaError
 
 def get_dataframe(path_query, spark):
+    
+    """por alguna razon desconocida glue no acepta el protocolo s3n, por otra razon las aplicaciones
+    locales no aceptan el protocolo s3 agregando un ; al final de la url, por lo que manejamos la excepción
+    para ambos casos."""
+    
     while True:
         try:
             return spark.read.format("com.databricks.spark.csv") \
-                .option("header", "true") \
-                .option("inferschema", "true") \
-                .csv(path_query.replace("s3://", "s3n://"))
+                .options(header=True, inferschema=True) \
+                .csv(path_query) # version s3
+        except Py4JJavaError:
+            return spark.read.format("com.databricks.spark.csv") \
+                .options(header=True, inferschema=True) \
+                .csv(path_query.replace("s3://", "s3n://")) # version s3n
         except AnalysisException:
             time.sleep(1)
             pass
