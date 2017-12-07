@@ -91,8 +91,11 @@ def run_query(query, database, s3_output, spark):
             }
         )
     print('Execution ID: ' + response['QueryExecutionId'])
-    # return s3_output + response['QueryExecutionId'] + '.csv'
-    df = get_dataframe( s3_output + response['QueryExecutionId'] + '.csv', spark)
+    query_id = response['QueryExecutionId']
+    status = 'RUNNING'
+    while status != 'SUCCEEDED':
+        status = athena.get_query_execution(QueryExecutionId=query_id)['QueryExecution']['Status']['State']
+        time.sleep(5)
     
     file_path = s3_output + response['QueryExecutionId'] + '.csv'
     metadata_file_path = file_path + '.metadata'

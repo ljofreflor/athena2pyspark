@@ -17,6 +17,20 @@ from athena2pyspark.config import getLocalSparkSession
 spark = getLocalSparkSession()
 
 class Test(unittest.TestCase):
+    
+    def test_afinidad_de_marcas(self):
+        
+        from athena2pyspark.athena_sql.dinamicas import afinidad_de_marcas
+        
+        query = afinidad_de_marcas()
+        
+        s3_output = "s3://leonardo.exalitica.com/boto3/query_1/"
+        
+        path_location = run_query(query=query, database="prod_easy", s3_output=s3_output, spark=spark)
+        
+        # df = get_dataframe(path_query = path_location, spark=spark)
+        
+        return query, s3_output #, df
 
     def test_RunQuery(self):
         s3_output = "s3://leonardo.exalitica.com/boto3/query_1/"
@@ -34,7 +48,10 @@ class Test(unittest.TestCase):
         return ddl_create_database, ddl_create_table
     
     def test_CreateTable(self):
-        """  """
+        """ crea la tabla a partir de la informacion existente en la carpeta dada: deben existir
+        ciertas validaciones importantes, como lo son, que todos los archivos tengan la misma estructura
+        , que no existan archivos de metadata"""
+        
         s3_output = "s3://leonardo.exalitica.com/boto3/query_1/"
         file_location = run_query(query = "select * from baul_2 limit 1000", 
                                   database = "ljofre", 
