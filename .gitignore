@@ -5,3 +5,5 @@ athena2pyspark/athena2delivery/__pycache__/
 athena2pyspark.egg-info/
 build/
 dist/
+.project
+.pydevproject

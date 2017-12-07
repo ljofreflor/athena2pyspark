@@ -12,3 +12,6 @@ etl_scripts_to_s3:
 clean:
 	find . -name \*~ -delete
 	find . -name \*.pyc -delete
+
+update_readme:
+	jupyter-nbconvert --to markdown README.ipynb
