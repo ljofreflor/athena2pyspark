@@ -1,3 +1,4 @@
+from athena2pyspark.athena_sql import querybyByName
 u'''
 Created on 27-11-2017
 
@@ -18,6 +19,20 @@ spark = getLocalSparkSession()
 
 class Test(unittest.TestCase):
     
+    def test_empty_folder(self):
+        '''
+        lanza la excepción cuando uno quiere guardar archivos en carpetas no vacias. las
+        carpetas no vacias pueden generar porblemas en athena
+        '''
+        pass
+    
+    def test_0_getByName(self):
+        query = querybyByName("sql/afinidad_marca")
+        s3_output = "s3://leonardo.exalitica.com/boto3/query_1/"
+        query = run_query(query=query, database="prod_jumbo", s3_output=s3_output, spark=spark)
+        
+        pass
+    
     def test_afinidad_de_marcas(self):
         
         from athena2pyspark.athena_sql.dinamicas import afinidad_de_marcas
@@ -30,7 +45,7 @@ class Test(unittest.TestCase):
         
         # df = get_dataframe(path_query = path_location, spark=spark)
         
-        return query, s3_output #, df
+        return query, s3_output, path_location
 
     def test_RunQuery(self):
         s3_output = "s3://leonardo.exalitica.com/boto3/query_1/"
