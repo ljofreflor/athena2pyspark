@@ -18,3 +18,5 @@ def querybyByName(query_file_name, args = None):
     
     if args is not None:
         sql_file = sql_file.format(args)
+        
+    return sql_file

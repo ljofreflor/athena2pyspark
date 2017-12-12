@@ -13,28 +13,22 @@ from pyspark.sql import dataframe
 from pyspark.sql.utils import AnalysisException
 import time
 from py4j.protocol import Py4JJavaError
+import os.path
 
 def get_dataframe(path_query, spark):
     
     u"""por alguna razon desconocida glue no acepta el protocolo s3n, por otra razon las aplicaciones
     locales no aceptan el protocolo s3 agregando un ; al final de la url, por lo que manejamos la excepcion
     para ambos casos."""
-    
-    while True:  
-        try:
-            return spark.read.format("com.databricks.spark.csv") \
-                .options(header=True, inferschema=True) \
-                .load(path_query) # version s3
-        except AnalysisException:
-            try :
-                return spark.read.format("com.databricks.spark.csv") \
-                    .options(header=True, inferschema=True) \
-                    .csv(str(path_query).replace("s3://", "s3n://")) # version s3n
-            except AnalysisException:
-                pass
-            
-            except Py4JJavaError:
-                time.sleep(1)
+     
+    try:
+        return spark.read.format("com.databricks.spark.csv") \
+            .options(header=True, inferschema=True) \
+            .csv(path_query) # version s3
+    except:
+        return spark.read.format("com.databricks.spark.csv") \
+                        .options(header=True, inferschema=True) \
+                        .csv(str(path_query).replace("s3://", "s3n://")) #version s3n
 
 
 def run_create_table(query, database, s3_output):
@@ -95,6 +89,8 @@ def run_query(query, database, s3_output, spark):
     status = 'RUNNING'
     while status != 'SUCCEEDED':
         status = athena.get_query_execution(QueryExecutionId=query_id)['QueryExecution']['Status']['State']
+        assert(status != 'FAILED')
+        assert(status != 'CANCELLED')
         time.sleep(5)
     
     file_path = s3_output + response['QueryExecutionId'] + '.csv'
