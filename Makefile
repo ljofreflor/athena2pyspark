@@ -7,7 +7,7 @@ library_to_s3:
 	git commit -a -m "publicacion en s3"
 
 etl_scripts_to_s3:
-	aws s3 cp --recursive ./etl_scripts s3://leonardo.exalitica.com/etl_scripts/
+	aws s3 cp --recursive ./etl_scripts s3://cencosud.exalitica.com/prod/etl_scripts/
 
 clean:
 	find . -name \*~ -delete

@@ -5,14 +5,14 @@ from awsglue.context import GlueContext
 from athena2pyspark import get_dataframe
 from athena2pyspark.config import getLocalSparkSession
 
-"""
+
 sc = SparkContext().getOrCreate()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
+
 """
-
-spark = getLocalSparkSession()
-
+spark = getLocalSparkSession() # corre local
+"""
 query = querybyByName("sql/party_rubro")
 
 temp_folder = "s3://athena2pyspark.temp/temp/"
