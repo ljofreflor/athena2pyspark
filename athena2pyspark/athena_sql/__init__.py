@@ -23,7 +23,7 @@ def querybyByName(query_file_name, args = None):
         sql_file = open(mop_base, "r").read()
     except IOError:
         pdb.set_trace()
-        zf = zipfile.ZipFile(mop_base)
+        zf = zipfile.ZipFile(project_base)
         print mop_base
         sql_file = zf.open(os.path.join("athena2pyspark/athena_sql/mop-glue", query_file_name + ".sql"))
         pass  
