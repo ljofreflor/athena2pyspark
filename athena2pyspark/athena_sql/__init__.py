@@ -3,7 +3,9 @@ Created on 01-12-2017
 
 @author: lnjofre
 '''
-import os.path 
+import os.path
+import zipfile
+
 
 def querybyByName(query_file_name, args = None):
     '''
@@ -11,10 +13,16 @@ def querybyByName(query_file_name, args = None):
     :param query_file_name:
     :param args: diccionario con los parametros de la query
     '''
-    mop_base = os.path.join(os.path.dirname(__file__), "mop-glue", query_file_name + '.sql')    
     
-
-    sql_file = open(mop_base, "r").read()
+    project_base = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    
+    try:       
+        mop_base = os.path.join(project_base, "athena2pyspark", "athena_sql", "mop-glue", query_file_name + ".sql")
+        sql_file = open(mop_base, "r").read()
+    except IOError:
+        zf = zipfile.ZipFile(mop_base)
+        sql_file = zf.open(os.path.join("athena2pyspark", "athena_sql", "mop-glue", query_file_name + ".sql"))
+        pass  
     
     if args is not None:
         sql_file = sql_file.format(args)
