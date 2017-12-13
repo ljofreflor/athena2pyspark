@@ -11,6 +11,7 @@ spark = glueContext.spark_session
 """
 spark = getLocalSparkSession()
 """
+
 query_afinidad_marca = querybyByName("sql/afinidad_marca")
 
 query_afinidad_subclase = querybyByName("sql/afinidad_subclase")
