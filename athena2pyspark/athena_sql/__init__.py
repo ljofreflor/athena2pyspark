@@ -21,7 +21,8 @@ def querybyByName(query_file_name, args = None):
         sql_file = open(mop_base, "r").read()
     except IOError:
         zf = zipfile.ZipFile(mop_base)
-        sql_file = zf.open(os.path.join("athena2pyspark", "athena_sql", "mop-glue", query_file_name + ".sql"))
+        print mop_base
+        sql_file = zf.open(os.path.join("athena2pyspark/athena_sql/mop-glue", query_file_name + ".sql"))
         pass  
     
     if args is not None:
