@@ -5,6 +5,8 @@ Created on 01-12-2017
 '''
 import os.path
 import zipfile
+import pdb 
+
 
 
 def querybyByName(query_file_name, args = None):
@@ -20,6 +22,7 @@ def querybyByName(query_file_name, args = None):
         mop_base = os.path.join(project_base, "athena2pyspark", "athena_sql", "mop-glue", query_file_name + ".sql")
         sql_file = open(mop_base, "r").read()
     except IOError:
+        pdb.set_trace()
         zf = zipfile.ZipFile(mop_base)
         print mop_base
         sql_file = zf.open(os.path.join("athena2pyspark/athena_sql/mop-glue", query_file_name + ".sql"))
