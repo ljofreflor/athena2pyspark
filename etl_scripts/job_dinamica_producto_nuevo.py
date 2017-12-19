@@ -1,10 +1,4 @@
-"""
-sc = SparkContext.getOrCreate()
-glueContext = GlueContext(sc)
-
-spark = glueContext.spark_session
-
-"""
+# job_dinamica_producto_nuevo.py
 
 import sys
 
@@ -13,27 +7,24 @@ from awsglue.job import Job
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from pyspark.sql import Row
-from pyspark.sql import SQLContext
-from pyspark.sql.functions import coalesce
-from pyspark.sql.types import *
 
 from athena2pyspark import run_query
 from athena2pyspark.athena_sql import querybyByName
 from athena2pyspark.athena_sql.dinamicas import producto_nuevo
 from athena2pyspark.config import result_folder_temp, getLocalSparkSession
 
-"""
+
 spark = getLocalSparkSession()
 """
 
 sc = SparkContext().getOrCreate()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
+"""
 
+query_str = querybyByName("sql/producto_nuevo")
 
-#query_str = querybyByName("sql/jumbo/dinamicas/producto_nuevo")
-
-args = getResolvedOptions(sys.argv, ['subclase', 'marca', 'lift'])
+args = getResolvedOptions(sys.argv, ['id_com', 'lift'])
 
 subclase, marca, lift = (args['subclase'], args['marca'], args['lift'])
 

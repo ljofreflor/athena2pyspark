@@ -18,7 +18,7 @@ result_folder_temp = "s3://athena2pyspark.temp/temp/"
 
 
 def getLocalSparkSession():
-    os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages com.amazonaws:aws-java-sdk:1.11.86,org.apache.hadoop:hadoop-aws:2.7.2 pyspark-shell'
+    os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages mysql:mysql-connector-java:5.1.38,com.amazonaws:aws-java-sdk:1.11.86,org.apache.hadoop:hadoop-aws:2.7.2 pyspark-shell'
     spark = SparkSession.builder.master("local").getOrCreate()
     spark.conf.set("fs.s3n.awsAccessKeyId", aws_access_key_id)
     spark.conf.set("fs.s3n.awsSecretAccessKey", aws_secret_access_key)
