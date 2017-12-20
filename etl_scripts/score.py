@@ -36,9 +36,14 @@ pre_url = spark.read.format('jdbc').options(
     user="root",
     password="cencosud2015").load()
 
-for i in range(1, 10):
-    corr = pre_url.where("STATUS = 'F' AND SEM_REF = '" +
-                         sem_ref_modelos + "'").select("CORR").limit(1).head()[0]
+corr = 0
+
+while corr != -1:
+    try:
+        corr = pre_url.where("STATUS = 'F' AND SEM_REF = '" +
+                             sem_ref_modelos + "'").select("CORR").limit(1).head()[0]
+    except TypeError:
+        corr = -1
 
     con = mysql.connector.connect(user='root', password='cencosud2015',
                                   host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='JUMBO')
