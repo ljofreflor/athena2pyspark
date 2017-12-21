@@ -17,10 +17,13 @@ spark = glueContext.spark_session
 """
 
 query_str = querybyByName("sql/producto_nuevo")
-args = getResolvedOptions(sys.argv, ['id_com', 'lift'])
-subclase, marca, lift = (args['subclase'], args['marca'], args['lift'])
+args = getResolvedOptions(sys.argv, ['id_com'])
+id_com = args['id_com']
 
 path_query = run_query(query=query_str, database="prod_jumbo",
                        s3_output=result_folder_temp, spark=spark)
+
+
+# el resultado de la query debe quedar seteado
 
 print "El subrubro es: ", args['ID_COM']
