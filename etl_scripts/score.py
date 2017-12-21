@@ -227,3 +227,9 @@ while corr != -1:
         """UPDATE JUMBO.INFO_MODELOS_ITER_BIT SET STATUS = 'K' WHERE CORR = """ + str(corr))
     con.commit()
     con.close()
+
+    try:
+        corr = pre_url.where("STATUS = 'F' AND SEM_REF = '" +
+                             sem_ref_modelos + "'").select("CORR").limit(1).head()[0]
+    except TypeError:
+        corr = -1
