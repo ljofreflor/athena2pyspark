@@ -21,6 +21,24 @@ sc = SparkContext.getOrCreate()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
 
+# Parametros banderas
+args = getResolvedOptions(sys.argv, ['bandera'])
+
+if args['bandera']=='jumbo':
+    loc_pref = 'J511'
+    features = '(12,[9,10,11],[90.0,30.0,90.0])'
+    rec = '90'
+    lp = 'SRM'
+elif args['bandera']=='paris':
+    loc_pref = 'P511'
+    features = '(17,[12,13,14,15,16],[365.0,30.0,90.0,180.0,365.0])'
+    rec = '365'
+    lp = 'SRM'
+else:
+    loc_pref = 'E511'
+    features = '(17,[12,13,14,15,16],[2190.0,30.0,90.0,180.0,365.0])'
+    rec = '2190'
+    lp = 'RM'
 
 # Parametros temporales
 sem_ref = "2017_46"
@@ -30,7 +48,7 @@ mes = "201710"
 # Logica modelos a scorear en MySQL
 # Integrar inserts y updates a tabla bitacora para tomar un correlativo
 pre_url = spark.read.format('jdbc').options(
-    url="jdbc:mysql://cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com:3306/JUMBO",
+    url="jdbc:mysql://cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com:3306/{0}".format(args['bandera'].upper()),
     driver="com.mysql.jdbc.Driver",
     dbtable="INFO_MODELOS_ITER_BIT",
     user="root",
@@ -46,7 +64,7 @@ while corr != -1:
         corr = -1
 
     con = mysql.connector.connect(user='root', password='cencosud2015',
-                                  host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='JUMBO')
+                                  host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
 
     c = con.cursor()
     c.execute(
@@ -95,7 +113,7 @@ while corr != -1:
     baul2_sample.srm,
     baul2_sample.prom_meses_dist,
     baul2_sample.recencia+(date_diff('day',cast('{1}' as date),cast('{2}' as date))) as recencia,
-    baul2_sample.id_loc_pref_frec_jumbo,
+    baul2_sample.id_loc_pref_frec_{4},
     baul2_sample.temp_min,
     baul2_sample.temp_max,
     baul2_sample.precipitaciones,
@@ -111,7 +129,7 @@ while corr != -1:
     -- /11. join output4 y clientes_global -> output5/
     (select
     output4.*,
-    coalesce(e.id_loc_pref_frec_jumbo,'J511') as id_loc_pref_frec_jumbo
+    coalesce(e.id_loc_pref_frec_{4},'{5}') as id_loc_pref_frec_{4}
     from
     -- /10. join output3 y data_lp -> output4/
     (select
@@ -128,8 +146,8 @@ while corr != -1:
     (select
     a.party_id,
     coalesce(b.corr,{3}) as corr,
-    coalesce(b.features,'(12,[9,10,11],[90.0,30.0,90.0])') as features,
-    coalesce(b.rec_cp,90) as rec,
+    coalesce(b.features,'{6}') as features,
+    coalesce(b.rec_cp,{7}) as rec,
     h.vector_1
     from
     clientes_baul as a
@@ -148,7 +166,7 @@ while corr != -1:
     left join
     (select *
     from data_lp
-    where srm in
+    where {8} in
     (select srm from srm where corr = {3})) as d
     on
     output3.party_id=d.party_id) as output4
@@ -159,7 +177,7 @@ while corr != -1:
     left join
     temp as f
     on
-    output5.id_loc_pref_frec_jumbo=f.location_id) as baul2_sample
+    output5.id_loc_pref_frec_{4}=f.location_id) as baul2_sample
     left join
     -- generando tabla data5 con recencia actual a partir de fuente
     (select
@@ -188,7 +206,7 @@ while corr != -1:
     party_id,
     corr) as data3) as data5
     on
-    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr)
+    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr, args['bandera'].upper(), loc_pref, features, rec, lp)
 
     ruta_base = ath.run_query(query=query_score,
                               s3_output=result_folder_temp,
@@ -204,7 +222,7 @@ while corr != -1:
                                                  "FEATURES", "PROM_MESES_DIST", "RECENCIA", "TEMP_MIN", "TEMP_MAX", "PRECIPITACIONES"])
 
     pipeline_model = PipelineModel.load(
-        "s3://cencosud.exalitica.com/prepod/jumbo/modelos_iter/2017_16/" + str(corr) + "")
+        "s3://cencosud.exalitica.com/prepod/{0}/modelos_iter/2017_16/".format(args['bandera'].lower()) + str(corr) + "")
 
     base_to_score_ml = MLUtils.convertVectorColumnsToML(base_to_score)
 
@@ -217,14 +235,14 @@ while corr != -1:
 
     # Se quita .mode("overwrite") por lentitud
     result.repartition(1).write.mode("append").parquet(
-        "s3://pablo.exalitica.com/cencosud/jumbo/score/" + sem_ref + "/")
+        "s3://pablo.exalitica.com/cencosud/{0}/score/".format(args['bandera'].lower()) + sem_ref + "/")
 
     con = mysql.connector.connect(user='root', password='cencosud2015',
-                                  host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='JUMBO')
+                                  host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
 
     c = con.cursor()
     c.execute(
-        """UPDATE JUMBO.INFO_MODELOS_ITER_BIT SET STATUS = 'K' WHERE CORR = """ + str(corr))
+        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'K' WHERE CORR = """.format(args['bandera'].upper()) + str(corr))
     con.commit()
     con.close()
 
