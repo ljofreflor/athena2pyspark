@@ -9,18 +9,20 @@ from pyspark.mllib.linalg import Vectors
 from pyspark.mllib.util import MLUtils
 from pyspark.sql.functions import udf
 from pyspark.sql.types import FloatType
+
 from athena2pyspark import get_dataframe
 import athena2pyspark as ath
+from athena2pyspark.config import getLocalSparkSession
 from athena2pyspark.config import result_folder_temp
 
-"""
+
 spark = getLocalSparkSession()
 """
 
 sc = SparkContext.getOrCreate()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
-
+"""
 
 # Parametros temporales
 sem_ref = "2017_46"
