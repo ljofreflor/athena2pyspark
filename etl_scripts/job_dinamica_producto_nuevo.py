@@ -8,13 +8,13 @@ from athena2pyspark import run_query
 from athena2pyspark.athena_sql import querybyByName
 from athena2pyspark.config import result_folder_temp, getLocalSparkSession
 
+"""
 spark = getLocalSparkSession()
-
 """
 sc = SparkContext().getOrCreate()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
-"""
+
 
 query_str = querybyByName("sql/producto_nuevo")
 args = getResolvedOptions(sys.argv, ['id_com', 'lift'])
