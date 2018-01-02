@@ -65,24 +65,25 @@ pre_url = spark.read.format('jdbc').options(
 con = mysql.connector.connect(user='root', password='cencosud2015',
                               host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
 
-c = con.cursor()
-c.execute(
-    """INSERT INTO {0}.INFO_MODELOS_ITER_BIT
-    SELECT
-    DISTINCT CORR,
-    N_MUESTRA,
-    ROC_Prob1,
-    GINI_Prob1,
-    ROC_Pred,
-    GINI_Pred,
-    SEM_REF AS SEM_REF_MODEL,
-    STATUS,
-    '{1}' as SEM_REF_SCORE
-    FROM {0}.INFO_MODELOS_ITER
-    WHERE SEM_REF = '{2}'
-    LIMIT 10""".format(args['bandera'].upper(),sem_ref,sem_ref_modelos)
-con.commit()
-con.close()
+
+#c = con.cursor()
+#c.execute(
+#    """INSERT INTO {0}.INFO_MODELOS_ITER_BIT
+#    SELECT
+#    DISTINCT CORR,
+#    N_MUESTRA,
+#    ROC_Prob1,
+#    GINI_Prob1,
+#    ROC_Pred,
+#    GINI_Pred,
+#    SEM_REF AS SEM_REF_MODEL,
+#    STATUS,
+#    '{1}' as SEM_REF_SCORE
+#    FROM {0}.INFO_MODELOS_ITER
+#    WHERE SEM_REF = '{2}'
+#    LIMIT 10""".format(args['bandera'].upper(),sem_ref,sem_ref_modelos)
+#con.commit()
+#con.close()
 
 corr = 0
 
