@@ -3,13 +3,20 @@ import findspark
 findspark.init()
 """
 
+"""
+from athena2pyspark.config import getLocalSparkSession
+
+spark = getLocalSparkSession()
+"""
+
 from datetime import datetime
-import time
 import sys
+import time
+
 from awsglue.context import GlueContext
-from awsglue.utils import getResolvedOptions
 from awsglue.job import Job
 from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
 import mysql.connector
 from pyspark.context import SparkContext
 from pyspark.ml import PipelineModel
@@ -20,15 +27,29 @@ from pyspark.sql.types import FloatType
 
 from athena2pyspark import get_dataframe
 import athena2pyspark as ath
-from athena2pyspark.config import getLocalSparkSession
 from athena2pyspark.config import result_folder_temp
-
-spark = getLocalSparkSession()
-"""
 sc = SparkContext.getOrCreate()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
-"""
+
+# Parametros banderas
+args = getResolvedOptions(sys.argv, ['bandera'])
+
+if args['bandera']=='jumbo':
+    loc_pref = 'J511'
+    features = '(12,[9,10,11],[90.0,30.0,90.0])'
+    rec = '90'
+    lp = 'SRM'
+elif args['bandera']=='paris':
+    loc_pref = 'P511'
+    features = '(17,[12,13,14,15,16],[365.0,30.0,90.0,180.0,365.0])'
+    rec = '365'
+    lp = 'SRM'
+else:
+    loc_pref = 'E511'
+    features = '(17,[12,13,14,15,16],[2190.0,30.0,90.0,180.0,365.0])'
+    rec = '2190'
+    lp = 'RM'
 
 # Parametros temporales
 sem_ref = "2017_46"
@@ -79,8 +100,8 @@ while corr != -1:
                                   host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
 
     c = con.cursor()
-    c.execute(
-        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'S' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(args['bandera'].upper(),str(corr),sem_ref)
+    c.execute("""UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'S' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(args['bandera'].upper(),str(corr), sem_ref))
+    
     con.commit()
     con.close()
 
