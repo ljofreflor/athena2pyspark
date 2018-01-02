@@ -12,10 +12,10 @@ from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 
 from athena2pyspark import run_query
-from athena2pyspark.athena_sql import querybyByName
-from athena2pyspark.config import result_folder_temp
+from athena2pyspark.athena_sql import queryByName
+from athena2pyspark.config import result_folder_temp, getLocalSparkSession
 
-"""
+
 spark = getLocalSparkSession()
 """
 sc = SparkContext().getOrCreate()
@@ -23,9 +23,11 @@ glueContext = GlueContext(sc)
 spark = glueContext.spark_session
 
 
-query_str = querybyByName("sql/producto_nuevo")
+
 args = getResolvedOptions(sys.argv, ['id_com'])
-id_com = args['id_com']
+"""
+query_str = queryByName("sql/producto_nuevo")
+#id_com = args['id_com']
 
 path_query = run_query(query=query_str, database="prod_jumbo",
                        s3_output=result_folder_temp, spark=spark)
@@ -33,4 +35,4 @@ path_query = run_query(query=query_str, database="prod_jumbo",
 
 # el resultado de la query debe quedar seteado
 
-print "El subrubro es: ", args['id_com']
+# print "El subrubro es: ", args['id_com']

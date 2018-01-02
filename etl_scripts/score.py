@@ -1,7 +1,15 @@
+"""
+import findspark
+findspark.init()
+"""
+
 from datetime import datetime
 import time
-
+import sys
 from awsglue.context import GlueContext
+from awsglue.utils import getResolvedOptions
+from awsglue.job import Job
+from awsglue.transforms import *
 import mysql.connector
 from pyspark.context import SparkContext
 from pyspark.ml import PipelineModel
@@ -15,10 +23,8 @@ import athena2pyspark as ath
 from athena2pyspark.config import getLocalSparkSession
 from athena2pyspark.config import result_folder_temp
 
-
 spark = getLocalSparkSession()
 """
-
 sc = SparkContext.getOrCreate()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
@@ -38,12 +44,34 @@ pre_url = spark.read.format('jdbc').options(
     user="root",
     password="cencosud2015").load()
 
+con = mysql.connector.connect(user='root', password='cencosud2015',
+                              host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
+
+#c = con.cursor()
+#c.execute(
+#    """INSERT INTO {0}.INFO_MODELOS_ITER_BIT
+#    SELECT
+#    DISTINCT CORR,
+#    N_MUESTRA,
+#    ROC_Prob1,
+#    GINI_Prob1,
+#    ROC_Pred,
+#    GINI_Pred,
+#    SEM_REF AS SEM_REF_MODEL,
+#    STATUS,
+#    '{1}' as SEM_REF_SCORE
+#    FROM {0}.INFO_MODELOS_ITER
+#    WHERE SEM_REF = '{2}'
+#    LIMIT 10""".format(args['bandera'].upper(),sem_ref,sem_ref_modelos)
+#con.commit()
+#con.close()
+
 corr = 0
 
 while corr != -1:
     try:
-        corr = pre_url.where("STATUS = 'F' AND SEM_REF = '" +
-                             sem_ref_modelos + "'").select("CORR").limit(1).head()[0]
+        corr = pre_url.where("STATUS = 'F' AND SEM_REF_SCORE = '" +
+                             sem_ref + "'").select("CORR").limit(1).head()[0]
     except TypeError:
         corr = -1
 
@@ -52,7 +80,7 @@ while corr != -1:
 
     c = con.cursor()
     c.execute(
-        """UPDATE JUMBO.INFO_MODELOS_ITER_BIT SET STATUS = 'S' WHERE CORR = """ + str(corr))
+        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'S' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(args['bandera'].upper(),str(corr),sem_ref)
     con.commit()
     con.close()
 
@@ -70,8 +98,7 @@ while corr != -1:
 
     fecha_inicio = datetime.utcfromtimestamp(
         strToDate(str(a))).strftime("%Y-%m-%d")
-    act_date = str(parametrica.where("N_KEY = '" + sem_ref +
-                                     "'").select("fec_fin").head()[0])[0:10]
+    act_date = str(parametrica.where("N_KEY = '" + sem_ref + "'").select("fec_fin").head()[0])[0:10]
 
     # Query genera tablon Athena
     query_score = """
@@ -226,12 +253,12 @@ while corr != -1:
 
     c = con.cursor()
     c.execute(
-        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'K' WHERE CORR = """.format(args['bandera'].upper()) + str(corr))
+        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'K' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(args['bandera'].upper(),str(corr),sem_ref)
     con.commit()
     con.close()
 
     try:
-        corr = pre_url.where("STATUS = 'F' AND SEM_REF = '" +
-                             sem_ref_modelos + "'").select("CORR").limit(1).head()[0]
+        corr = pre_url.where("STATUS = 'F' AND SEM_REF_SCORE = '" +
+                             sem_ref + "'").select("CORR").limit(1).head()[0]
     except TypeError:
         corr = -1
