@@ -65,7 +65,6 @@ pre_url = spark.read.format('jdbc').options(
 con = mysql.connector.connect(user='root', password='cencosud2015',
                               host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
 
-
 #c = con.cursor()
 #c.execute(
 #    """INSERT INTO {0}.INFO_MODELOS_ITER_BIT
@@ -99,7 +98,7 @@ while corr != -1:
 
     c = con.cursor()
     c.execute(
-        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'S' WHERE CORR = """.format(args['bandera'].upper()) + str(corr))
+        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'S' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(args['bandera'].upper(),str(corr),sem_ref)
     con.commit()
     con.close()
 
@@ -272,7 +271,7 @@ while corr != -1:
 
     c = con.cursor()
     c.execute(
-        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'K' WHERE CORR = """.format(args['bandera'].upper()) + str(corr))
+        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'K' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(args['bandera'].upper(),str(corr),sem_ref)
     con.commit()
     con.close()
 
