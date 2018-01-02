@@ -40,21 +40,24 @@ if args['bandera'] == 'jumbo':
     features = '(12,[9,10,11],[90.0,30.0,90.0])'
     rec = '90'
     lp = 'SRM'
+    rec_lp = '365'
 elif args['bandera'] == 'paris':
     loc_pref = 'P511'
     features = '(17,[12,13,14,15,16],[365.0,30.0,90.0,180.0,365.0])'
     rec = '365'
     lp = 'SRM'
+    rec_lp = '365'
 else:
     loc_pref = 'E511'
     features = '(17,[12,13,14,15,16],[2190.0,30.0,90.0,180.0,365.0])'
     rec = '2190'
     lp = 'RM'
+    rec_lp = '2190'
 
 # Parametros temporales
-sem_ref = "2017_46"
+sem_ref = "2017_52"
 sem_ref_modelos = "2017_16"
-mes = "201710"
+mes = "201712"
 
 # Logica modelos a scorear en MySQL
 # Integrar inserts y updates a tabla bitacora para tomar un correlativo
@@ -69,24 +72,26 @@ pre_url = spark.read.format('jdbc').options(
 con = mysql.connector.connect(user='root', password='cencosud2015',
                               host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
 
-#c = con.cursor()
-# c.execute(
-#    """INSERT INTO {0}.INFO_MODELOS_ITER_BIT
-#    SELECT
-#    DISTINCT CORR,
-#    N_MUESTRA,
-#    ROC_Prob1,
-#    GINI_Prob1,
-#    ROC_Pred,
-#    GINI_Pred,
-#    SEM_REF AS SEM_REF_MODEL,
-#    STATUS,
-#    '{1}' as SEM_REF_SCORE
-#    FROM {0}.INFO_MODELOS_ITER
-#    WHERE SEM_REF = '{2}'
-#    LIMIT 10""".format(args['bandera'].upper(),sem_ref,sem_ref_modelos)
-# con.commit()
-# con.close()
+#check_sem_score = pre_url.where("SEM_REF_SCORE = '" +sem_ref + "'").select("SEM_REF_SCORE").limit(1).head()[0]
+
+#if str(check_sem_score) != sem_ref:
+#    c = con.cursor()
+#    c.execute("""INSERT INTO {0}.INFO_MODELOS_ITER_BIT
+#        SELECT
+#        DISTINCT CORR,
+#        N_MUESTRA,
+#        ROC_Prob1,
+#        GINI_Prob1,
+#        ROC_Pred,
+#        GINI_Pred,
+#        SEM_REF AS SEM_REF_MODEL,
+#        'F' AS STATUS,
+#        '{1}' as SEM_REF_SCORE
+#        FROM {0}.INFO_MODELOS_ITER
+#        WHERE SEM_REF = '{2}'
+#        LIMIT 10""".format(args['bandera'].upper(),sem_ref,sem_ref_modelos)
+#    con.commit()
+#    con.close()
 
 corr = 0
 
@@ -170,7 +175,7 @@ while corr != -1:
     (select
     output3.*,
     coalesce(d.prom_meses_dist,0) as prom_meses_dist,
-    coalesce(d.recencia,365) as recencia
+    coalesce(d.recencia,{9}) as recencia
     from
     -- /9. join aux3 y srm -> output3/
     (select
@@ -241,7 +246,7 @@ while corr != -1:
     party_id,
     corr) as data3) as data5
     on
-    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr, args['bandera'].upper(), loc_pref, features, rec, lp)
+    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr, args['bandera'].upper(), loc_pref, features, rec, lp, rec_lp)
 
     ruta_base = ath.run_query(query=query_score,
                               s3_output=result_folder_temp,
@@ -269,8 +274,8 @@ while corr != -1:
         "probability")).toDF("PARTY_ID", "CORR", "SCORE")
 
     # Se quita .mode("overwrite") por lentitud
-    result.repartition(1).write.mode("append").parquet(
-        "s3://pablo.exalitica.com/cencosud/{0}/score/".format(args['bandera'].lower()) + sem_ref + "/")
+    result.repartition(1).write.mode("append").partitionBy("corr").parquet(
+        "s3a://pablo.exalitica.com/cencosud/{0}/score/".format(args['bandera'].lower()) + sem_ref + "/")
 
     con = mysql.connector.connect(user='root', password='cencosud2015',
                                   host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
