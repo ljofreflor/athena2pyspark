@@ -35,12 +35,12 @@ spark = glueContext.spark_session
 # Parametros banderas
 args = getResolvedOptions(sys.argv, ['bandera'])
 
-if args['bandera']=='jumbo':
+if args['bandera'] == 'jumbo':
     loc_pref = 'J511'
     features = '(12,[9,10,11],[90.0,30.0,90.0])'
     rec = '90'
     lp = 'SRM'
-elif args['bandera']=='paris':
+elif args['bandera'] == 'paris':
     loc_pref = 'P511'
     features = '(17,[12,13,14,15,16],[365.0,30.0,90.0,180.0,365.0])'
     rec = '365'
@@ -59,7 +59,8 @@ mes = "201710"
 # Logica modelos a scorear en MySQL
 # Integrar inserts y updates a tabla bitacora para tomar un correlativo
 pre_url = spark.read.format('jdbc').options(
-    url="jdbc:mysql://cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com:3306/{0}".format(args['bandera'].upper()),
+    url="jdbc:mysql://cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com:3306/{0}".format(
+        args['bandera'].upper()),
     driver="com.mysql.jdbc.Driver",
     dbtable="INFO_MODELOS_ITER_BIT",
     user="root",
@@ -69,7 +70,7 @@ con = mysql.connector.connect(user='root', password='cencosud2015',
                               host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
 
 #c = con.cursor()
-#c.execute(
+# c.execute(
 #    """INSERT INTO {0}.INFO_MODELOS_ITER_BIT
 #    SELECT
 #    DISTINCT CORR,
@@ -84,8 +85,8 @@ con = mysql.connector.connect(user='root', password='cencosud2015',
 #    FROM {0}.INFO_MODELOS_ITER
 #    WHERE SEM_REF = '{2}'
 #    LIMIT 10""".format(args['bandera'].upper(),sem_ref,sem_ref_modelos)
-#con.commit()
-#con.close()
+# con.commit()
+# con.close()
 
 corr = 0
 
@@ -100,8 +101,9 @@ while corr != -1:
                                   host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
 
     c = con.cursor()
-    c.execute("""UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'S' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(args['bandera'].upper(),str(corr), sem_ref))
-    
+    c.execute("""UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'S' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(
+        args['bandera'].upper(), str(corr), sem_ref))
+
     con.commit()
     con.close()
 
@@ -119,7 +121,8 @@ while corr != -1:
 
     fecha_inicio = datetime.utcfromtimestamp(
         strToDate(str(a))).strftime("%Y-%m-%d")
-    act_date = str(parametrica.where("N_KEY = '" + sem_ref + "'").select("fec_fin").head()[0])[0:10]
+    act_date = str(parametrica.where("N_KEY = '" + sem_ref +
+                                     "'").select("fec_fin").head()[0])[0:10]
 
     # Query genera tablon Athena
     query_score = """
@@ -274,7 +277,7 @@ while corr != -1:
 
     c = con.cursor()
     c.execute(
-        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'K' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(args['bandera'].upper(),str(corr),sem_ref)
+        """UPDATE {0}.INFO_MODELOS_ITER_BIT SET STATUS = 'K' WHERE CORR = {1} AND SEM_REF_SCORE = '{2}'""".format(args['bandera'].upper(), str(corr), sem_ref))
     con.commit()
     con.close()
 
