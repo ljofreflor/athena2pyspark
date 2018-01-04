@@ -11,7 +11,7 @@ library_to_egg:
 	
 
 etl_scripts_to_s3:
-	aws s3 cp --recursive ./etl_scripts s3://cencosud.exalitica.com/prod/etl_scripts/
+	# aws s3 cp --recursive ./etl_scripts s3://cencosud.exalitica.com/prod/etl_scripts/
 
 clean:
 	find . -name \*~ -delete
