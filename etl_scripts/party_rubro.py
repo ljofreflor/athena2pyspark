@@ -1,4 +1,6 @@
 
+# aws s3 cp  ./etl_scripts/party_rubro.py
+# s3://cencosud.exalitica.com/prod/etl_scripts/party_rubro.py
 
 from awsglue.context import GlueContext
 from pyspark.context import SparkContext
@@ -29,7 +31,7 @@ path_query = run_query(query=query, database=flag,
 df = get_dataframe(path_query=path_query, spark=spark)  # leer el csv con spark
 
 # guardar el parquet en la ruta dada por la configuracion
-df.write.parquet(path_party_rubro)
+df.write.mode("overwrite").parquet(path_party_rubro)
 
 
 # particionar el dataframe por lo solicitado

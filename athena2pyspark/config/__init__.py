@@ -31,7 +31,7 @@ def getLocalSparkSession():
 paths = {
     "afinidad_marca": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/afinidad_marca/",
     "afinidad_subclase": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/afinidad_subclase/",
-    "ciclo_recompra": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/ciclo_recompra/",
-    "objetivo_item": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/objetivo_item/",
-    "party_rubro": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/party_rubro/"
+    "ciclo_recompra": "s3://cencosud.exalitica.com/prod/{flag}/metrica/ciclo_recompra/",
+    "objetivo_item": "s3://cencosud.exalitica.com/prod/{flag}/metrica/objetivo_item/",
+    "party_rubro": "s3://cencosud.exalitica.com/prod/{flag}/metrica/party_rubro/"
 }
