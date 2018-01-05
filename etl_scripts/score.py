@@ -1,3 +1,6 @@
+# aws s3 cp  ./etl_scripts/score.py
+# s3://cencosud.exalitica.com/prod/etl_scripts/score.py
+
 """
 import findspark
 findspark.init()
@@ -74,7 +77,7 @@ con = mysql.connector.connect(user='root', password='cencosud2015',
 
 #check_sem_score = pre_url.where("SEM_REF_SCORE = '" +sem_ref + "'").select("SEM_REF_SCORE").limit(1).head()[0]
 
-#if str(check_sem_score) != sem_ref:
+# if str(check_sem_score) != sem_ref:
 #    c = con.cursor()
 #    c.execute("""INSERT INTO {0}.INFO_MODELOS_ITER_BIT
 #        SELECT
