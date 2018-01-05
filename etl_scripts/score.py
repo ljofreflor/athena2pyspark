@@ -276,9 +276,8 @@ while corr != -1:
     result = model.select("PARTY_ID", "CORR", firstelement(
         "probability")).toDF("PARTY_ID", "CORR", "SCORE")
 
-    # Se quita .mode("overwrite") por lentitud
-    result.repartition(1).write.mode("append").partitionBy("corr").parquet(
-        "s3a://pablo.exalitica.com/cencosud/{0}/score/".format(args['bandera'].lower()) + sem_ref + "/")
+    result.repartition(1).write.mode("overwrite").partitionBy("corr").parquet(
+        "s3://pablo.exalitica.com/cencosud/{0}/score/{1}/corr={2}".format(args['bandera'].lower(),sem_ref,corr))
 
     con = mysql.connector.connect(user='root', password='cencosud2015',
                                   host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
