@@ -9,7 +9,6 @@ findspark.init()
 """
 from athena2pyspark.config import getLocalSparkSession
 
-spark = getLocalSparkSession()
 """
 
 from datetime import datetime
@@ -30,13 +29,15 @@ from pyspark.sql.types import FloatType
 
 from athena2pyspark import get_dataframe
 import athena2pyspark as ath
-from athena2pyspark.config import result_folder_temp
-sc = SparkContext.getOrCreate()
-glueContext = GlueContext(sc)
-spark = glueContext.spark_session
+from athena2pyspark.config import result_folder_temp, getLocalSparkSession
+
+spark = getLocalSparkSession()
+
 
 # Parametros banderas
-args = getResolvedOptions(sys.argv, ['bandera'])
+#args = getResolvedOptions(sys.argv, ['bandera'])
+
+args = {'bandera': 'jumbo'}
 
 if args['bandera'] == 'jumbo':
     loc_pref = 'J511'
@@ -277,7 +278,7 @@ while corr != -1:
         "probability")).toDF("PARTY_ID", "CORR", "SCORE")
 
     result.repartition(1).write.mode("overwrite").partitionBy("corr").parquet(
-        "s3://pablo.exalitica.com/cencosud/{0}/score/{1}/corr={2}".format(args['bandera'].lower(),sem_ref,corr))
+        "s3://pablo.exalitica.com/cencosud/{0}/score/{1}/corr={2}".format(args['bandera'].lower(), sem_ref, corr))
 
     con = mysql.connector.connect(user='root', password='cencosud2015',
                                   host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
