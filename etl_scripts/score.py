@@ -190,7 +190,7 @@ while corr != -1:
     coalesce(b.rec_cp,{7}) as rec,
     h.vector_1
     from
-    clientes_baul as a
+    (select distinct party_id from variables_cruzadas) as a
     left join
     (select * from baul2_sparse where corr = {3}) as b
     on
@@ -246,7 +246,7 @@ while corr != -1:
     party_id,
     corr) as data3) as data5
     on
-    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr, args['bandera'].upper(), loc_pref, features, rec, lp, rec_lp)
+    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr, args['bandera'].lower(), loc_pref, features, rec, lp, rec_lp)
 
     ruta_base = ath.run_query(query=query_score,
                               s3_output=result_folder_temp,
@@ -270,11 +270,11 @@ while corr != -1:
 
     firstelement = udf(lambda v: float(v[1]), FloatType())
 
-    result = model.select("PARTY_ID", "CORR", firstelement(
-        "probability")).toDF("PARTY_ID", "CORR", "SCORE")
+    result = model.select("PARTY_ID", firstelement(
+        "probability")).toDF("party_id","score")
 
-    result.repartition(1).write.mode("overwrite").partitionBy("corr").parquet(
-        "s3://pablo.exalitica.com/cencosud/{0}/score/{1}/corr={2}".format(args['bandera'].lower(),sem_ref,corr))
+    result.repartition(1).write.mode("overwrite").parquet(
+        "s3://pablo.exalitica.com/cencosud/{0}/score/n_key={1}/corr={2}".format(args['bandera'].lower(),sem_ref,corr))
 
     con = mysql.connector.connect(user='root', password='cencosud2015',
                                   host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
