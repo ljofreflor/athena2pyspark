@@ -1,16 +1,6 @@
 # aws s3 cp  ./etl_scripts/score.py
 # s3://cencosud.exalitica.com/prod/etl_scripts/score.py
 
-"""
-import findspark
-findspark.init()
-"""
-
-"""
-from athena2pyspark.config import getLocalSparkSession
-
-"""
-
 from datetime import datetime
 import sys
 import time
@@ -31,13 +21,12 @@ from athena2pyspark import get_dataframe
 import athena2pyspark as ath
 from athena2pyspark.config import result_folder_temp, getLocalSparkSession
 
-spark = getLocalSparkSession()
+spark = getLocalSparkSession(False)
 
 
 # Parametros banderas
-#args = getResolvedOptions(sys.argv, ['bandera'])
-
-args = {'bandera': 'jumbo'}
+args = getResolvedOptions(sys.argv, ['bandera'])
+#args = {'bandera': 'jumbo'}
 
 if args['bandera'] == 'jumbo':
     loc_pref = 'J511'
