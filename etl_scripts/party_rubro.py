@@ -10,7 +10,7 @@ from athena2pyspark import run_query
 from athena2pyspark.athena_sql import queryByName
 from athena2pyspark.config import getLocalSparkSession, result_folder_temp, paths
 
-flag = 'prod_jumbo'  # setear la bandera
+flag = 'jumbo'  # setear la bandera
 # asociar la bandera a la ruta de resultados
 path_party_rubro = paths['party_rubro'].format(**{'flag': flag})
 

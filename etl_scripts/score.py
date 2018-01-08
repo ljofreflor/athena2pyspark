@@ -1,3 +1,6 @@
+# aws s3 cp  ./etl_scripts/score.py
+# s3://cencosud.exalitica.com/prod/etl_scripts/score.py
+
 """
 import findspark
 findspark.init()
@@ -6,7 +9,6 @@ findspark.init()
 """
 from athena2pyspark.config import getLocalSparkSession
 
-spark = getLocalSparkSession()
 """
 
 from datetime import datetime
@@ -27,13 +29,15 @@ from pyspark.sql.types import FloatType
 
 from athena2pyspark import get_dataframe
 import athena2pyspark as ath
-from athena2pyspark.config import result_folder_temp
-sc = SparkContext.getOrCreate()
-glueContext = GlueContext(sc)
-spark = glueContext.spark_session
+from athena2pyspark.config import result_folder_temp, getLocalSparkSession
+
+spark = getLocalSparkSession()
+
 
 # Parametros banderas
-args = getResolvedOptions(sys.argv, ['bandera'])
+#args = getResolvedOptions(sys.argv, ['bandera'])
+
+args = {'bandera': 'jumbo'}
 
 if args['bandera'] == 'jumbo':
     loc_pref = 'J511'
@@ -74,7 +78,7 @@ con = mysql.connector.connect(user='root', password='cencosud2015',
 
 #check_sem_score = pre_url.where("SEM_REF_SCORE = '" +sem_ref + "'").select("SEM_REF_SCORE").limit(1).head()[0]
 
-#if str(check_sem_score) != sem_ref:
+# if str(check_sem_score) != sem_ref:
 #    c = con.cursor()
 #    c.execute("""INSERT INTO {0}.INFO_MODELOS_ITER_BIT
 #        SELECT
