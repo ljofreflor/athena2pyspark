@@ -185,20 +185,16 @@ while corr != -1:
     -- /8. join clientes_baul, baul2_sparse y variables cruzadas y reemplazando nulls-> aux3/
     (select
     a.party_id,
+    a.vector_1,
     coalesce(b.corr,{3}) as corr,
     coalesce(b.features,'{6}') as features,
-    coalesce(b.rec_cp,{7}) as rec,
-    h.vector_1
+    coalesce(b.rec_cp,{7}) as rec
     from
-    (select distinct party_id from variables_cruzadas) as a
+    variables_cruzadas as a
     left join
     (select * from baul2_sparse where corr = {3}) as b
     on
-    a.party_id=b.party_id
-    left join
-    variables_cruzadas as h
-    on
-    a.party_id=h.party_id) as aux3
+    a.party_id=b.party_id) as aux3
     left join
     srm as c
     on
