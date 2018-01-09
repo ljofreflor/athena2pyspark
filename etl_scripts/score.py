@@ -24,7 +24,7 @@ from athena2pyspark.config import result_folder_temp, getLocalSparkSession
 spark = getLocalSparkSession(False)
 
 # Parametros banderas
-args = getResolvedOptions(sys.argv, ['bandera'])
+args = getResolvedOptions(sys.argv, ['bandera','sem_ref','mes','sem_ref_modelos'])
 #args = {'bandera': 'jumbo'}
 
 if args['bandera'] == 'jumbo':
@@ -47,9 +47,9 @@ else:
     rec_lp = '2190'
 
 # Parametros temporales
-sem_ref = "2017_52"
-sem_ref_modelos = "2017_16"
-mes = "201712"
+sem_ref = args['sem_ref']
+sem_ref_modelos = args['sem_ref_modelos']
+mes = args['mes']
 
 # Logica modelos a scorear en MySQL
 # Integrar inserts y updates a tabla bitacora para tomar un correlativo
