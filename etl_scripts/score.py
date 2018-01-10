@@ -1,16 +1,6 @@
 # aws s3 cp  ./etl_scripts/score.py
 # s3://cencosud.exalitica.com/prod/etl_scripts/score.py
 
-"""
-import findspark
-findspark.init()
-"""
-
-"""
-from athena2pyspark.config import getLocalSparkSession
-
-"""
-
 from datetime import datetime
 import sys
 import time
@@ -31,13 +21,11 @@ from athena2pyspark import get_dataframe
 import athena2pyspark as ath
 from athena2pyspark.config import result_folder_temp, getLocalSparkSession
 
-spark = getLocalSparkSession()
-
+spark = getLocalSparkSession(False)
 
 # Parametros banderas
-#args = getResolvedOptions(sys.argv, ['bandera'])
-
-args = {'bandera': 'jumbo'}
+args = getResolvedOptions(sys.argv, ['bandera','sem_ref','mes','sem_ref_modelos'])
+#args = {'bandera': 'jumbo'}
 
 if args['bandera'] == 'jumbo':
     loc_pref = 'J511'
@@ -59,9 +47,9 @@ else:
     rec_lp = '2190'
 
 # Parametros temporales
-sem_ref = "2017_52"
-sem_ref_modelos = "2017_16"
-mes = "201712"
+sem_ref = args['sem_ref']
+sem_ref_modelos = args['sem_ref_modelos']
+mes = args['mes']
 
 # Logica modelos a scorear en MySQL
 # Integrar inserts y updates a tabla bitacora para tomar un correlativo
@@ -170,11 +158,6 @@ while corr != -1:
     f.temp_max,
     f.precipitaciones
     from
-    -- /11. join output4 y clientes_global -> output5/
-    (select
-    output4.*,
-    coalesce(e.id_loc_pref_frec_{4},'{5}') as id_loc_pref_frec_{4}
-    from
     -- /10. join output3 y data_lp -> output4/
     (select
     output3.*,
@@ -186,15 +169,16 @@ while corr != -1:
     aux3.*,
     c.srm
     from
-    -- /8. join clientes_baul, baul2_sparse y variables cruzadas y reemplazando nulls-> aux3/
+    -- /8. join clientes, baul2_sparse y variables cruzadas y reemplazando nulls-> aux3/
     (select
     a.party_id,
+    coalesce(a.id_loc_pref_frec_{4},'{5}') as id_loc_pref_frec_{4},
     coalesce(b.corr,{3}) as corr,
     coalesce(b.features,'{6}') as features,
     coalesce(b.rec_cp,{7}) as rec,
     h.vector_1
     from
-    (select distinct party_id from variables_cruzadas) as a
+    clientes as a
     left join
     (select * from baul2_sparse where corr = {3}) as b
     on
@@ -202,7 +186,9 @@ while corr != -1:
     left join
     variables_cruzadas as h
     on
-    a.party_id=h.party_id) as aux3
+    a.party_id=h.party_id
+    where
+    a.{10}_mail = '1') as aux3
     left join
     srm as c
     on
@@ -213,11 +199,7 @@ while corr != -1:
     where {8} in
     (select srm from srm where corr = {3})) as d
     on
-    output3.party_id=d.party_id) as output4
-    left join
-    clientes_global as e
-    on
-    output4.party_id=e.party_id) as output5
+    output3.party_id=d.party_id) as output5
     left join
     temp as f
     on
@@ -250,7 +232,7 @@ while corr != -1:
     party_id,
     corr) as data3) as data5
     on
-    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr, args['bandera'].lower(), loc_pref, features, rec, lp, rec_lp)
+    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr, args['bandera'].lower(), loc_pref, features, rec, lp, rec_lp,args['bandera'].lower()[:2])
 
     ruta_base = ath.run_query(query=query_score,
                               s3_output=result_folder_temp,
