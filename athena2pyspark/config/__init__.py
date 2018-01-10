@@ -6,11 +6,12 @@ Created on 29-11-2017
 
 import os
 
-from awsglue.context import GlueContext
 import boto3
 from pyspark.context import SparkContext
 from pyspark.sql.context import SQLContext
 from pyspark.sql.session import SparkSession
+
+from awsglue.context import GlueContext
 
 
 aws_access_key_id = 'AKIAJYICQU2XCXFLACWA'
@@ -40,5 +41,19 @@ paths = {
     "afinidad_subclase": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/afinidad_subclase/",
     "ciclo_recompra": "s3://cencosud.exalitica.com/prod/{flag}/metrica/ciclo_recompra/",
     "objetivo_item": "s3://cencosud.exalitica.com/prod/{flag}/metrica/objetivo_item/",
-    "party_rubro": "s3://cencosud.exalitica.com/prod/{flag}/metrica/party_rubro/"
+    "party_rubro": "s3://cencosud.exalitica.com/prod/{flag}/metrica/party_rubro/",
+    "prepriorizacion_filtrada": "s3://cencosud.exalitica.com/prod/{flag}/listado/prepriorizacion_filtrada/",
+    "priorizacion":  "s3://cencosud.exalitica.com/prod/{flag}/listado/prepriorizacion_filtrada/",
+    "prepriorizacion": "s3://cencosud.exalitica.com/prod/{flag}/listado/priorizacion/"
+}
+
+partition_by = {
+    "afinidad_marca": [],
+    "afinidad_subclase": [],
+    "ciclo_recompra": [],
+    "objetivo_item": [],
+    "party_rubro": [],
+    "prepriorizacion_filtrada": ['col2', 'col1'],
+    "priorizacion":  [],
+    "prepriorizacion": []
 }

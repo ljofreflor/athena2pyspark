@@ -16,7 +16,7 @@ from pyspark.sql.utils import AnalysisException
 
 from athena2pyspark.athena_sql import queryByName
 from athena2pyspark.config import getLocalSparkSession, paths,\
-    result_folder_temp
+    result_folder_temp, partition_by
 
 from .config import aws_access_key_id, aws_secret_access_key
 
@@ -148,7 +148,7 @@ def get_create_table(query):
     # return s3_output + response['QueryExecutionId'] + '.csv'
 
 
-def job(flag, queryName, local):
+def job(branch, flag, queryName, local):
 
     # asociar la bandera a la ruta de resultados
     path_result = paths[queryName].format(**{'flag': flag})
@@ -157,11 +157,13 @@ def job(flag, queryName, local):
 
     query = queryByName('sql/' + queryName)  # obtener la query
 
-    path_query = run_query(query=query, database='prod_' + flag,
+    path_query = run_query(query=query, database=branch + "_" + flag,
                            s3_output=result_folder_temp, spark=spark)  # correr la query
 
     # leer el csv con spark
     df = get_dataframe(path_query=path_query, spark=spark)
 
     # guardar el parquet en la ruta dada por la configuracion
-    df.write.mode("overwrite").parquet(path_result)
+
+    df.write.mode("overwrite").partitionBy(
+        partition_by[queryName]).parquet(path_result)

@@ -8,6 +8,8 @@ library_to_s3:
 library_to_egg:
 	zip -r athena2pyspark ./athena2pyspark/*
 	mv athena2pyspark.zip athena2pyspark.egg
+	zip -r awsglue ./awsglue/*
+	mv awsglue.zip awsglue.egg
 	
 
 etl_scripts_to_s3:
