@@ -4,6 +4,7 @@ Created on 24-10-2017
 @author: lnjofre
 '''
 
+from exceptions import UnboundLocalError
 import os.path
 import re
 import time
@@ -15,10 +16,9 @@ from pyspark.sql import dataframe
 from pyspark.sql.utils import AnalysisException
 
 from athena2pyspark.athena_sql import queryByName
-from athena2pyspark.config import getLocalSparkSession, paths,\
-    result_folder_temp, partition_by
-
-from .config import aws_access_key_id, aws_secret_access_key
+from athena2pyspark.config import aws_access_key_id, aws_secret_access_key,\
+    get_spark_session
+from athena2pyspark.config import paths, result_folder_temp, partition_by
 
 
 def get_dataframe(path_query, spark):
@@ -148,22 +148,40 @@ def get_create_table(query):
     # return s3_output + response['QueryExecutionId'] + '.csv'
 
 
-def job(branch, flag, queryName, local):
+def repair_table(database, table, spark):
+    athena = boto3.client('athena', region_name='us-east-1',
+                          aws_access_key_id=aws_access_key_id,
+                          aws_secret_access_key=aws_secret_access_key)
 
+    query = "MSCK REPAIR TABLE " + table
+
+    response = run_query(query=query, database=database,
+                         s3_output=result_folder_temp, spark=spark)  # correr la query
+
+
+def job(branch, flag, queryName, spark, partition_by_id_com=False, param={}):
+
+    database = branch + "_" + flag
     # asociar la bandera a la ruta de resultados
     path_result = paths[queryName].format(**{'flag': flag})
 
-    spark = getLocalSparkSession(local)  # corre local (true) o glue (falso)
+    query = queryByName('sql/' + queryName).format(**param)
 
-    query = queryByName('sql/' + queryName)  # obtener la query
-
-    path_query = run_query(query=query, database=branch + "_" + flag,
+    path_query = run_query(query=query, database=database,
                            s3_output=result_folder_temp, spark=spark)  # correr la query
 
-    # leer el csv con spark
     df = get_dataframe(path_query=path_query, spark=spark)
 
     # guardar el parquet en la ruta dada por la configuracion
+    try:
+        assert(partition_by_id_com)
+        df.write.mode("overwrite").partitionBy(
+            partition_by[queryName]).parquet(path_result + "id_com=" + str(param['id_com']))
+    except AssertionError:
+        df.write.mode("overwrite").partitionBy(
+            partition_by[queryName]).parquet(path_result)
 
-    df.write.mode("overwrite").partitionBy(
-        partition_by[queryName]).parquet(path_result)
+    # jorge: repara las particiones de la tabla
+    repair_table(database=database, table=queryName, spark=spark)
+
+    return path_query

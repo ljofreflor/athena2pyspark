@@ -4,14 +4,19 @@
 import sys
 from athena2pyspark import run_query, get_dataframe
 from athena2pyspark.athena_sql import queryByName
-from athena2pyspark.config import result_folder_temp, getLocalSparkSession
-id_com = 180
+from athena2pyspark.config import result_folder_temp, get_spark_session
+from awsglue.utils import getResolvedOptions
+
+spark = get_spark_session(False)
 
 """
+id_com = '180'
+"""
+
 args = getResolvedOptions(sys.argv, ['id_com'])
 id_com = args['id_com']
-"""
-spark = getLocalSparkSession(True)
+
+
 query_str = queryByName(
     query_file_name="sql/producto_nuevo", args={'id_com': id_com})
 path_query_producto_nuevo = run_query(query=query_str, database="prod_jumbo",
@@ -20,11 +25,13 @@ path_query_producto_nuevo = run_query(query=query_str, database="prod_jumbo",
 # todo: tiene muchas celdas y muchas ofertas para un cliente y deberia ser uno
 df_producto_nuevo = get_dataframe(
     path_query=path_query_producto_nuevo, spark=spark)
+
 # dataframe de los clientes (template)
 path_query_clientes = run_query(query="select * from clientes",
                                 database="prod_jumbo", s3_output=result_folder_temp, spark=spark)
 clientes = get_dataframe(
     path_query=path_query_clientes, spark=spark)
+
 # dataframe de las ofertas (ofertas)
 path_query_ofertas = run_query(query="select * from ofertas",
                                database="prod_jumbo", s3_output=result_folder_temp, spark=spark)
@@ -34,7 +41,6 @@ df_ofertas = get_dataframe(
 clientes.createOrReplaceTempView("clientes")
 
 df_ofertas.createOrReplaceTempView("ofertas")
-
 
 # (sirve para cualquier comunicacion)
 df_producto_nuevo.createOrReplaceTempView("df_producto_nuevo")
@@ -48,4 +54,5 @@ LEFT JOIN clientes c
 ON a.party_id = c.party_id
 """)
 # TODO: setear la ruta donde se guarda el listado
-# listado_final.write.mode("overwrite").parquet("s3")
+listado_final.coalesce(1).write.mode("overwrite").csv(
+    "s3://cencosud.exalitica.com/prod/prod/listado/id_com=" + id_com + "/")
