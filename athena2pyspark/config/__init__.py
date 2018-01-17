@@ -40,5 +40,6 @@ paths = {
     "afinidad_subclase": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/afinidad_subclase/",
     "ciclo_recompra": "s3://cencosud.exalitica.com/prod/{flag}/metrica/ciclo_recompra/",
     "objetivo_item": "s3://cencosud.exalitica.com/prod/{flag}/metrica/objetivo_item/",
-    "party_rubro": "s3://cencosud.exalitica.com/prod/{flag}/metrica/party_rubro/"
+    "party_rubro": "s3://cencosud.exalitica.com/prod/{flag}/metrica/party_rubro/",
+    "consumo_habitual_descontinuado": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/consumo_habitual_descontinuado/"
 }
