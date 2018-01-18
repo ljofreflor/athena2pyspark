@@ -1,5 +1,4 @@
-# aws s3 cp  ./etl_scripts/score.py
-# s3://cencosud.exalitica.com/prod/etl_scripts/score.py
+# aws s3 cp  ./etl_scripts/score.py s3://cencosud.exalitica.com/prod/etl_scripts/score.py
 
 from datetime import datetime
 import sys
@@ -19,9 +18,9 @@ from pyspark.sql.types import FloatType
 
 from athena2pyspark import get_dataframe
 import athena2pyspark as ath
-from athena2pyspark.config import result_folder_temp, getLocalSparkSession
+from athena2pyspark.config import result_folder_temp, get_spark_session
 
-spark = getLocalSparkSession(False)
+spark = get_spark_session({'mode':'glue'})
 
 # Parametros banderas
 args = getResolvedOptions(sys.argv, ['bandera','sem_ref','mes','sem_ref_modelos'])
@@ -236,7 +235,7 @@ while corr != -1:
 
     ruta_base = ath.run_query(query=query_score,
                               s3_output=result_folder_temp,
-                              database="score",
+                              database="score_{0}".format(args['bandera'].lower()),
                               spark=spark)
 
     base = get_dataframe(path_query=ruta_base, spark=spark)

@@ -42,6 +42,7 @@ paths = {
     "ciclo_recompra": "s3://cencosud.exalitica.com/prod/{flag}/metrica/ciclo_recompra/",
     "objetivo_item": "s3://cencosud.exalitica.com/prod/{flag}/metrica/objetivo_item/",
     "party_rubro": "s3://cencosud.exalitica.com/prod/{flag}/metrica/party_rubro/",
+    "consumo_habitual_descontinuado": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/consumo_habitual_descontinuado/",
     "prepriorizacion_filtrada": "s3://cencosud.exalitica.com/prod/{flag}/listado/prepriorizacion_filtrada/",
     "priorizacion":  "s3://cencosud.exalitica.com/prod/{flag}/priorizacion/",
     "prepriorizacion": "s3://cencosud.exalitica.com/prod/{flag}/prepriorizacion/",
@@ -57,5 +58,7 @@ partition_by = {
     "prepriorizacion_filtrada": ['col2', 'col1'],
     "priorizacion":  [],
     "prepriorizacion": ['col2', 'col1'],
-    "listado": []
+    "listado": [],
+    "consumo_habitual_descontinuado": []
+
 }
