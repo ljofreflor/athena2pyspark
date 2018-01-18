@@ -108,7 +108,7 @@ while corr != -1:
 
     # Script para score
     parametrica = spark.read.format("com.databricks.spark.csv").option("header", "true").option("inferSchema", "true").load(
-        "s3://cencosud.exalitica.com/prepod/semanas_parametricas_spark_v2.csv")
+        "s3n://cencosud.exalitica.com/prepod/semanas_parametricas_spark_v2.csv")
     a = parametrica.where("N_KEY = '" + sem_ref +
                           "'").select("CODMES").head()[0]
 
@@ -260,10 +260,10 @@ while corr != -1:
     firstelement = udf(lambda v: float(v[1]), FloatType())
 
     result = model.select("PARTY_ID", firstelement(
-        "probability")).toDF("party_id","score")
+        "probability")).toDF("party_id", "score")
 
     result.repartition(1).write.mode("overwrite").parquet(
-        "s3://pablo.exalitica.com/cencosud/{0}/score/n_key={1}/corr={2}".format(args['bandera'].lower(),sem_ref,corr))
+        "s3n://pablo.exalitica.com/cencosud/{0}/score/n_key={1}/corr={2}".format(args['bandera'].lower(), sem_ref, corr))
 
     con = mysql.connector.connect(user='root', password='cencosud2015',
                                   host='cencosud-mariadb-preprod.cindgoz7oqnp.us-east-1.rds.amazonaws.com', database='{0}'.format(args['bandera'].upper()))
