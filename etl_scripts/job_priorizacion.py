@@ -7,8 +7,8 @@ Created on 09-01-2018
 # s3://cencosud.exalitica.com/prod/etl_scripts/job_priorizacion.py
 """
 el formato de los argumentos deben ser los siguientes
-args = {'id_com': '262', 'flag': 'jumbo', 'mode': 'glue'} # para glue
-args = {'id_com': '262', 'flag': 'jumbo', 'mode': 'local'} # para local y databricks
+args = {'id_com': '262', 'flag': 'jumbo', 'ncelda':'7','mode': 'glue'} # para glue
+args = {'id_com': '262', 'flag': 'jumbo','ncelda':'7', 'mode': 'local'} # para local y databricks
 """
 
 import sys
@@ -18,27 +18,22 @@ from athena2pyspark.config import get_spark_session
 from awsglue.utils import getResolvedOptions
 
 
-args = getResolvedOptions(sys.argv, ['id_com', 'flag', 'mode'])
+args = getResolvedOptions(sys.argv, ['id_com', 'flag', 'mode', 'ncelda'])
 
 try:
+    spark = spark  # funciona en glue
+except NameError:
     spark = get_spark_session(args)
-except UnboundLocalError:
-    # de ecurrir una excepcion significa que se esta corriendo en glue y el spark ya
-    # esta seteado
-    pass
-except ValueError:
-    pass
 
-
-"""
+# prepriorizacion
 job(branch="prod", flag="jumbo", queryName="prepriorizacion",
     partition_by_id_com=True, spark=spark, param=args)
-"""
 
+# priorizacion
 job(branch="prod", flag="jumbo", queryName="priorizacion",
     partition_by_id_com=True, spark=spark, param=args)
 
-
+# listado
 path_query = job(branch="prod", flag="jumbo", queryName="listado",
                  spark=spark, partition_by_id_com=False, param=args)
 
