@@ -32,18 +32,21 @@ if args['bandera'] == 'jumbo':
     rec = '90'
     lp = 'SRM'
     rec_lp = '365'
+    contact = "ju_mail = '1'"
 elif args['bandera'] == 'paris':
     loc_pref = 'P511'
     features = '(17,[12,13,14,15,16],[365.0,30.0,90.0,180.0,365.0])'
     rec = '365'
-    lp = 'SRM'
+    lp = 'RM'
     rec_lp = '365'
+    contact = "pa_pos = 1"
 else:
     loc_pref = 'E511'
     features = '(17,[12,13,14,15,16],[2190.0,30.0,90.0,180.0,365.0])'
     rec = '2190'
     lp = 'RM'
     rec_lp = '2190'
+    contact = "ea_mail = 1"
 
 # Parametros temporales
 sem_ref = args['sem_ref']
@@ -187,7 +190,8 @@ while corr != -1:
     on
     a.party_id=h.party_id
     where
-    a.{10}_mail = '1') as aux3
+    a.{11}) as aux3
+    -- {10}_mail = '1'
     left join
     srm as c
     on
@@ -231,7 +235,7 @@ while corr != -1:
     party_id,
     corr) as data3) as data5
     on
-    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr, args['bandera'].lower(), loc_pref, features, rec, lp, rec_lp,args['bandera'].lower()[:2])
+    baul2_sample.party_id=data5.party_id) as df2""".format(sem_ref, fecha_inicio, act_date, corr, args['bandera'].lower(), loc_pref, features, rec, lp, rec_lp,args['bandera'].lower()[:2],contact)
 
     ruta_base = ath.run_query(query=query_score,
                               s3_output=result_folder_temp,
@@ -247,7 +251,7 @@ while corr != -1:
                                                  "FEATURES", "PROM_MESES_DIST", "RECENCIA", "TEMP_MIN", "TEMP_MAX", "PRECIPITACIONES"])
 
     pipeline_model = PipelineModel.load(
-        "s3://cencosud.exalitica.com/prepod/{0}/modelos_iter/2017_16/".format(args['bandera'].lower()) + str(corr) + "")
+        "s3://cencosud.exalitica.com/prepod/{0}/modelos_iter/{1}/".format(args['bandera'].lower(),sem_ref_modelos) + str(corr) + "")
 
     base_to_score_ml = MLUtils.convertVectorColumnsToML(base_to_score)
 
