@@ -45,7 +45,7 @@ path_query = job(branch="prod", flag="jumbo", queryName="listado",
 cols = ["PARTY_ID", "PROMO_ID", "COMM_CHANNEL_CD", "CODIGO_SIEBEL", "CODIGO_MOTOR",
         "COMMUNICATION_ID", "PAGE_ID", "DATOS_DE_CONTACTO", "CORRELATIVO", "GRUPO"]
 
-listado = spark.read.csv(path_query,header=False).toDF(*cols)
+listado = spark.read.csv(path_query,header=True).toDF(*cols)
 
 table = "LISTADO_COM_{id_com}".format(**args)
 
