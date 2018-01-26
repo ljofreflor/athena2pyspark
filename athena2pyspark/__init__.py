@@ -3,6 +3,8 @@ Created on 24-10-2017
 
 @author: lnjofre
 '''
+# TODO: implementar coverade de la libreria
+# TODO: implementar ambientes de la libreria
 
 from exceptions import UnboundLocalError
 import os.path
@@ -19,6 +21,23 @@ from athena2pyspark.athena_sql import queryByName
 from athena2pyspark.config import aws_access_key_id, aws_secret_access_key,\
     get_spark_session
 from athena2pyspark.config import paths, result_folder_temp, partition_by
+
+
+class cell(object):
+    def __init__(self):
+        pass
+
+
+def get_query_from_app(cell_list, spark, param):
+    # leer la matriz de configuracion
+    database = "prod_{flag}".format(**param)
+    query = "select distinct "
+    matriz_de_configuracion = queryByName(
+        "sql/matriz_de_configuracion", args=param)
+
+    matriz_de_configuracion_df = run_query(query=matriz_de_configuracion,
+                                           database=database, s3_output=result_folder_temp, spark=spark)
+    pass
 
 
 def get_dataframe(path_query, spark):

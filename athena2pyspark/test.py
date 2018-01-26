@@ -1,8 +1,9 @@
 import unittest
 
-from athena2pyspark import get_dataframe, run_query, get_ddl, run_create_table
+from athena2pyspark import get_dataframe, run_query, get_ddl, run_create_table,\
+    get_query_from_app
 from athena2pyspark.athena_sql import queryByName
-from athena2pyspark.config import getLocalSparkSession
+from athena2pyspark.config import get_spark_session
 u'''
 Created on 27-11-2017
 
@@ -16,17 +17,17 @@ El testing de componentes puede ser muy efectivo para mostrar la presencia de er
 -- Edsger Dijkstra
 '''
 
-spark = getLocalSparkSession()
+args = {'flag': 'jumbo', 'mode': 'local'}
+spark = get_spark_session(args)
 
 
 class Test(unittest.TestCase):
 
-    def test_0_getByName(self):
+    def test_getByName(self):
         query = queryByName("sql/party_rubro")
         s3_output = "s3://leonardo.exalitica.com/boto3/query_1/"
         query = run_query(query=query, database="prod_jumbo",
                           s3_output=s3_output, spark=spark)
-
         pass
 
     def test_afinidad_de_marcas(self):
