@@ -8,24 +8,20 @@ import zipfile
 #import pdb
 
 
-def queryByName(query_file_name, args=None):
+def queryByName(query_file_name, sql_path, args=None):
     '''
     este es un ejemplo
     :param query_file_name:
     :param args: diccionario con los parametros de la query
     '''
 
-    project_base = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-
     try:
-        mop_base = os.path.join(project_base, "athena2pyspark",
-                                "athena_sql", "mop-glue", query_file_name + ".sql")
+        mop_base = os.path.join(sql_path, query_file_name + ".sql")
         sql_file = open(mop_base, "r").read()
     except IOError:
-        # pdb.set_trace()
-        zf = zipfile.ZipFile(project_base)
+        zf = zipfile.ZipFile(sql_path)
         sql_file = zf.open(os.path.join(
-            "athena2pyspark/athena_sql/mop-glue", query_file_name + ".sql")).read()
+            sql_path, query_file_name + ".sql")).read()
         pass
 
     if args is not None:

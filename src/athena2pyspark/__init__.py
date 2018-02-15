@@ -178,29 +178,37 @@ def repair_table(database, table, spark):
                          s3_output=result_folder_temp, spark=spark)  # correr la query
 
 
-def job(branch, flag, queryName, spark, partition_by_id_com=False, param={}):
+class Job(object):
+    def __init__(self, sql_querys_path):
+        # esta libreria requiere de una ruta en donde se encuentren las
+        # consultas sql y asi poder ser reutilizable para cualquier set de
+        # querys
+        self.sql_querys_path = sql_querys_path
 
-    database = branch + "_" + flag
-    # asociar la bandera a la ruta de resultados
-    path_result = paths[queryName].format(**{'flag': flag})
+    def run(self, branch, flag, queryName, spark, sql_path="", partition_by_id_com=False, param={}):
 
-    query = queryByName('sql/' + queryName).format(**param)
+        database = branch + "_" + flag
+        # asociar la bandera a la ruta de resultados
+        path_result = paths[queryName].format(**{'flag': flag})
 
-    path_query = run_query(query=query, database=database,
-                           s3_output=result_folder_temp, spark=spark)  # correr la query
+        query = queryByName(
+            queryName, sql_path=self.sql_querys_path).format(**param)
 
-    df = get_dataframe(path_query=path_query, spark=spark)
+        path_query = run_query(query=query, database=database,
+                               s3_output=result_folder_temp, spark=spark)  # correr la query
 
-    # guardar el parquet en la ruta dada por la configuracion
-    try:
-        assert(partition_by_id_com)
-        df.write.mode("overwrite").partitionBy(
-            partition_by[queryName]).parquet(path_result + "id_com=" + str(param['id_com']))
-    except AssertionError:
-        df.write.mode("overwrite").partitionBy(
-            partition_by[queryName]).parquet(path_result)
+        df = get_dataframe(path_query=path_query, spark=spark)
 
-    # jorge: repara las particiones de la tabla
-    repair_table(database=database, table=queryName, spark=spark)
+        # guardar el parquet en la ruta dada por la configuracion
+        try:
+            assert(partition_by_id_com)
+            df.write.mode("overwrite").partitionBy(
+                partition_by[queryName]).parquet(path_result + "id_com=" + str(param['id_com']))
+        except AssertionError:
+            df.write.mode("overwrite").partitionBy(
+                partition_by[queryName]).parquet(path_result)
 
-    return path_query
+        # jorge: repara las particiones de la tabla
+        repair_table(database=database, table=queryName, spark=spark)
+
+        return path_query
