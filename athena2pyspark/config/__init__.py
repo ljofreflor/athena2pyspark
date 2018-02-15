@@ -39,26 +39,34 @@ def get_spark_session(args):
 paths = {
     "afinidad_marca": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/afinidad_marca/",
     "afinidad_subclase": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/afinidad_subclase/",
-    "ciclo_recompra": "s3://cencosud.exalitica.com/prod/{flag}/metrica/ciclo_recompra/",
-    "objetivo_item": "s3://cencosud.exalitica.com/prod/{flag}/metrica/objetivo_item/",
-    "party_rubro": "s3://cencosud.exalitica.com/prod/{flag}/metrica/party_rubro/",
-    "consumo_habitual_descontinuado": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/consumo_habitual_descontinuado/",
+    "ciclo_recompra": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/ciclo_recompra/",
+    "cons_hab_des": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/cons_hab_des/",
+    "consumo_habitual": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/consumo_habitual/",
+    "objetivo_item": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/objetivo_item/",
+    "party_rubro": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/party_rubro/",
+    "party_subrubro": "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/party_subrubro/",
     "prepriorizacion_filtrada": "s3://cencosud.exalitica.com/prod/{flag}/listado/prepriorizacion_filtrada/",
+    "prioriza_cliente": "s3://cencosud.exalitica.com/prod/{flag}/prioriza_cliente/",
     "priorizacion":  "s3://cencosud.exalitica.com/prod/{flag}/priorizacion/",
     "prepriorizacion": "s3://cencosud.exalitica.com/prod/{flag}/prepriorizacion/",
-    "listado": "s3://cencosud.exalitica.com/prod/{flag}/listado/"
+    "listado": "s3://cencosud.exalitica.com/prod/{flag}/listado/",
+    "up_sell":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/up_sell/"
 }
 
 partition_by = {
     "afinidad_marca": [],
     "afinidad_subclase": [],
     "ciclo_recompra": [],
+    "cons_hab_des": [],
+    "consumo_habitual": [],
     "objetivo_item": [],
     "party_rubro": [],
+    "party_subrubro": [],
     "prepriorizacion_filtrada": ['col2', 'col1'],
+    "prioriza_cliente": [],
     "priorizacion":  [],
     "prepriorizacion": ['col2', 'col1'],
     "listado": [],
-    "consumo_habitual_descontinuado": []
+    "up_sell": []
 
 }
