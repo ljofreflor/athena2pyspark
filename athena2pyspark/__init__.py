@@ -194,10 +194,10 @@ def job(branch, flag, queryName, spark, partition_by_id_com=False, param={}):
     # guardar el parquet en la ruta dada por la configuracion
     try:
         assert(partition_by_id_com)
-        df.write.mode("overwrite").partitionBy(
+        df.repartition(1).write.mode("overwrite").partitionBy(
             partition_by[queryName]).parquet(path_result + "id_com=" + str(param['id_com']))
     except AssertionError:
-        df.write.mode("overwrite").partitionBy(
+        df.repartition(1).write.mode("overwrite").partitionBy(
             partition_by[queryName]).parquet(path_result)
 
     # jorge: repara las particiones de la tabla
