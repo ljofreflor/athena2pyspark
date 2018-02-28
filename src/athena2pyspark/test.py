@@ -1,9 +1,8 @@
 import unittest
 
-from athena2pyspark import get_dataframe, run_query, get_ddl, run_create_table,\
-    get_query_from_app
-from athena2pyspark.athena_sql import queryByName
+from athena2pyspark import get_dataframe, run_query, get_ddl, run_create_table, queryByName
 from athena2pyspark.config import get_spark_session
+
 u'''
 Created on 27-11-2017
 
@@ -29,21 +28,6 @@ class Test(unittest.TestCase):
         query = run_query(query=query, database="prod_jumbo",
                           s3_output=s3_output, spark=spark)
         pass
-
-    def test_afinidad_de_marcas(self):
-
-        from athena2pyspark.athena_sql.dinamicas import afinidad_de_marcas
-
-        query = afinidad_de_marcas()
-
-        s3_output = "s3://leonardo.exalitica.com/boto3/query_1/"
-
-        path_location = run_query(
-            query=query, database="prod_easy", s3_output=s3_output, spark=spark)
-
-        # df = get_dataframe(path_query = path_location, spark=spark)
-
-        return query, s3_output, path_location
 
     def test_RunQuery(self):
         s3_output = "s3://leonardo.exalitica.com/boto3/query_1/"
@@ -78,3 +62,7 @@ class Test(unittest.TestCase):
             df=df, database="ljofre", table="test_table_2", s3_input=s3_output)
         run_create_table(query=ddl_create_table,
                          database="ljofre", s3_output=s3_output)
+
+
+if __name__ == '__main__':
+    unittest.main()
