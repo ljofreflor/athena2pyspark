@@ -1,3 +1,8 @@
+"""
+Esta es la parte buena! cuando procesamos querys con muchos WITH lo que podemos hacer es separar 
+esas querys en subquerys que se procesan en paralelo, se registran temporalmente en athena y se 
+consulta la query de mayor jerarquía. Este paralelismo nos permite ejecutar a mayor velocidad.
+"""
 
 from concurrent import futures
 from concurrent.futures import ThreadPoolExecutor, as_completed
