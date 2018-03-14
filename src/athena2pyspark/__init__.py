@@ -66,22 +66,23 @@ class athena2pyspark(object):
                                                     spark=spark)
         pass
 
-    def get_dataframe(self, path_query, spark):
+    def get_dataframe(self, path_query):
         u"""por alguna razon desconocida glue no acepta el protocolo s3n, por otra razon las aplicaciones
         locales no aceptan el protocolo s3 agregando un ; al final de la url, por lo que manejamos la excepcion
         para ambos casos."""
 
+        reader = self.spark.read.format("com.databricks.spark.csv") \
+            .options(header=True, inferschema=True)
+
         try:
-            return spark.read.format("com.databricks.spark.csv") \
-                .options(header=True, inferschema=True) \
-                .csv(path_query)  # version s3
+            return reader.csv(path_query)  # version s3
         except:
-            return spark.read.format("com.databricks.spark.csv") \
-                .options(header=True, inferschema=True) \
-                .csv(str(path_query).replace("s3://", "s3n://"))  # version s3n
+            # version s3n
+            return reader.csv(str(path_query).replace("s3://", "s3n://"))
 
     def run_create_table(self, query, database, s3_output):
-        athena = boto3.client('athena', region_name='us-east-1',
+        athena = boto3.client('athena',
+                              region_name='us-east-1',
                               aws_access_key_id=self.aws_access_key_id,
                               aws_secret_access_key=self.aws_secret_access_key)
 
@@ -98,6 +99,7 @@ class athena2pyspark(object):
                 'OutputLocation': s3_output,
             }
         )
+
         print('Execution ID: ' + response['QueryExecutionId'])
         # return s3_output + response['QueryExecutionId'] + '.csv'
 
@@ -228,6 +230,8 @@ class Job(object):
         self.field_partitons = field_partitons
 
     def run(self, database, query_name,  partition_by=None, param={}):
+
+        param[partition_by]
 
         # asociar la bandera a la ruta de resultados
         path_result = self.s3_tables_path[query_name].format(**param)
