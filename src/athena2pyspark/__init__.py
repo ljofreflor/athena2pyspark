@@ -11,26 +11,34 @@ import os.path
 import os.path
 import re
 import time
+from urlparse import urlparse
 import zipfile
 
 import boto3
-from py4j.protocol import Py4JJavaError
-import pyspark
-from pyspark.sql import dataframe
-from pyspark.sql.utils import AnalysisException
+#from py4j.protocol import Py4JJavaError
+#import pyspark
+#from pyspark.sql import dataframe
+#from pyspark.sql.utils import AnalysisException
 
 from athena2pyspark.config import get_spark_session
 
 
 class athena2pyspark(object):
-    def __init__(self, spark):
+    def __init__(self):
+        pass
 
+    def set_spark_session(self, spark):
         self.spark = spark
         aws_access_key_id = self.spark.conf.get("fs.s3n.awsAccessKeyId")
         aws_secret_access_key = self.spark.conf.get(
             "fs.s3n.awsSecretAccessKey")
+
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_access_key = aws_secret_access_key
+
+    def set_credentials(self, aws_secret_access_key, aws_access_key_id):
+        self.aws_secret_access_key = aws_secret_access_key
+        self.aws_access_key_id = aws_access_key_id
 
     def queryByName(self, query_file_name, sql_path, args=None):
         '''
@@ -159,6 +167,28 @@ class athena2pyspark(object):
         s3.delete_object(Bucket=Bucket, Key=Key)
 
         return file_path
+
+    def get_json(self, file_path):
+        s3 = boto3.resource('s3', region_name='us-east-1',
+                            aws_access_key_id=self.aws_access_key_id,
+                            aws_secret_access_key=self.aws_secret_access_key)
+
+        import unidecode
+        import io
+        import csv
+        key_url = urlparse(file_path)
+
+        bucket = key_url.netloc
+        key = key_url.path[1:]
+
+        obj = s3.Object(bucket, key)
+        result = unicode(unidecode.unidecode(
+            obj.get()['Body'].read().decode('utf-8')))
+
+        result_dict = list(csv.DictReader(
+            io.StringIO(result.replace('"', ''))))
+
+        return result_dict
 
     def get_ddl(self, df, database, table, s3_input):
         columns = df.columns

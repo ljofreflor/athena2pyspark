@@ -5,15 +5,14 @@ Created on 29-11-2017
 '''
 
 import os
-
-from awsglue.context import GlueContext
 import boto3
-from pyspark.context import SparkContext
-from pyspark.sql.context import SQLContext
-from pyspark.sql.session import SparkSession
 
 
 def get_spark_session(aws_access_key_id, aws_secret_access_key, args):
+    from pyspark.context import SparkContext
+    from pyspark.sql.context import SQLContext
+    from pyspark.sql.session import SparkSession
+    from awsglue.context import GlueContext
 
     if args['mode'] == "local":
 
