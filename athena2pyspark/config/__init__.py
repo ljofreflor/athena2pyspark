@@ -54,13 +54,15 @@ paths = {
     "prepri_party_subrubro": "s3://cencosud.exalitica.com/prod/{flag}/metricas/party_subrubro/",
     "prepri_producto_nuevo": "s3://cencosud.exalitica.com/prod/{flag}/metricas/producto_nuevo/",
     "prepri_propension": "s3://cencosud.exalitica.com/prod/{flag}/metricas/propension/",
+    "prepri_sensibilidad_precio": "s3://cencosud.exalitica.com/prod/{flag}/metricas/sensibilidad_precio/",
     "prepri_up_sell": "s3://cencosud.exalitica.com/prod/{flag}/metricas/up_sell/",
     "prepriorizacion_filtrada": "s3://cencosud.exalitica.com/prod/{flag}/listado/prepriorizacion_filtrada/",
     "prioriza_cliente": "s3://cencosud.exalitica.com/prod/{flag}/prioriza_cliente/",
     "priorizacion":  "s3://cencosud.exalitica.com/prod/{flag}/priorizacion/",
     "prepriorizacion": "s3://cencosud.exalitica.com/prod/{flag}/prepriorizacion/",
     "listado": "s3://cencosud.exalitica.com/prod/{flag}/listado/",
-    "up_sell":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/up_sell/"
+    "up_sell":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/up_sell/",
+    "sensibilidad_precio":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/sensibilidad_precio/"
 }
 
 partition_by = {
@@ -81,6 +83,7 @@ partition_by = {
     "prepri_party_subrubro": [],
     "prepri_producto_nuevo": [],
     "prepri_propension": [],
+    "prepri_sensibilidad_precio": [],
     "prepri_up_sell": [],
     "prepriorizacion_filtrada": ['col2', 'col1'],
     "prioriza_cliente": [],
