@@ -55,6 +55,7 @@ paths = {
     "prepri_producto_nuevo": "s3://cencosud.exalitica.com/prod/{flag}/metricas/producto_nuevo/",
     "prepri_propension": "s3://cencosud.exalitica.com/prod/{flag}/metricas/propension/",
     "prepri_sensibilidad_precio": "s3://cencosud.exalitica.com/prod/{flag}/metricas/sensibilidad_precio/",
+    "prepri_cross_sell": "s3://cencosud.exalitica.com/prod/{flag}/metricas/cross_sell/",
     "prepri_up_sell": "s3://cencosud.exalitica.com/prod/{flag}/metricas/up_sell/",
     "prepriorizacion_filtrada": "s3://cencosud.exalitica.com/prod/{flag}/listado/prepriorizacion_filtrada/",
     "prioriza_cliente": "s3://cencosud.exalitica.com/prod/{flag}/prioriza_cliente/",
@@ -62,6 +63,7 @@ paths = {
     "prepriorizacion": "s3://cencosud.exalitica.com/prod/{flag}/prepriorizacion/",
     "listado": "s3://cencosud.exalitica.com/prod/{flag}/listado/",
     "up_sell":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/up_sell/",
+    "cross_sell":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/cross_sell/",
     "sensibilidad_precio":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/sensibilidad_precio/"
 }
 
@@ -84,6 +86,7 @@ partition_by = {
     "prepri_producto_nuevo": [],
     "prepri_propension": [],
     "prepri_sensibilidad_precio": [],
+    "prepri_cross_sell": [],
     "prepri_up_sell": [],
     "prepriorizacion_filtrada": ['col2', 'col1'],
     "prioriza_cliente": [],
