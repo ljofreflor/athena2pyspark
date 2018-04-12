@@ -3,15 +3,17 @@
 all: clean update_readme library_to_s3 etl_scripts_to_s3
 
 library_to_s3_dev:
-	zip -r athena2pyspark ./src/athena2pyspark/*
+	cd ./src/athena2pyspark
+	zip -r ./../../athena2pyspark *
 	aws s3 cp ./athena2pyspark.zip s3://dev.library.exalitica.com/
 	rm ./athena2pyspark.zip
+	cd ..
+	cd ..
 
-library_to_egg:
-	zip -r athena2pyspark ./src/athena2pyspark/*
-	mv athena2pyspark.zip athena2pyspark.egg
-	zip -r awsglue ./awsglue/*
-	mv awsglue.zip awsglue.egg
+egg:
+	make clean
+	(cd src; zip -r ./../athena2pyspark.egg athena2pyspark/*)
+
 	
 
 etl_scripts_to_s3:

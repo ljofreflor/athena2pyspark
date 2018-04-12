@@ -1,12 +1,7 @@
-
-from setuptools import setup
-
+from setuptools import setup, find_packages
+ 
 setup(
-    name="athena2pyspark",
-    packages=["athena2pyspark"],
-    version=0.1,
-    author="exalitica",
-    autor_email="leonardo.jofre@exalitica.com",
-    # install_requires=["pyspark", "boto3"],
-    python_requires='==2.7'
-)
+    name = "mymath",
+    version = "0.1",
+    packages = find_packages()
+    )
