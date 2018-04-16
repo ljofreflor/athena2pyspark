@@ -72,6 +72,7 @@ partition_by = {
     "afinidad_subclase": [],
     "ciclo_recompra": [],
     "cons_hab_des": [],
+    "cross_sell": [],
     "consumo_habitual": [],
     "matriz_de_configuracion": [],
     "objetivo_item": [],
@@ -93,6 +94,7 @@ partition_by = {
     "priorizacion":  [],
     "prepriorizacion": ['col2', 'col1'],
     "listado": [],
+    "sensibilidad_precio": [],
     "up_sell": []
 
 }
