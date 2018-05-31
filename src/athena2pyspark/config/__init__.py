@@ -8,7 +8,12 @@ import os
 import boto3
 
 
-def get_spark_session(aws_access_key_id, aws_secret_access_key, args):
+def get_spark_session(args, aws_access_key_id=None, aws_secret_access_key=None):
+
+    if (aws_access_key_id is None) or (aws_secret_access_key is None):
+        aws_access_key_id = 'AKIAJYICQU2XCXFLACWA'
+        aws_secret_access_key = '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'
+
     from pyspark.context import SparkContext
     from pyspark.sql.context import SQLContext
     from pyspark.sql.session import SparkSession
@@ -22,6 +27,10 @@ def get_spark_session(aws_access_key_id, aws_secret_access_key, args):
         spark.conf.set("fs.s3n.awsSecretAccessKey", aws_secret_access_key)
         spark.conf.set("fs.s3.awsAccessKeyId", aws_access_key_id)
         spark.conf.set("fs.s3.awsSecretAccessKey", aws_secret_access_key)
+        spark._jsc.hadoopConfiguration().set("fs.s3.access.key", aws_access_key_id)
+        spark._jsc.hadoopConfiguration().set("fs.s3.secret.key", aws_secret_access_key)
+        spark._jsc.hadoopConfiguration().set("fs.s3n.access.key", aws_access_key_id)
+        spark._jsc.hadoopConfiguration().set("fs.s3n.secret.key", aws_secret_access_key)
 
     elif args['mode'] == "glue":
 
