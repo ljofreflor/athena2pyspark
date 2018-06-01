@@ -12,7 +12,7 @@ library_to_s3_dev:
 
 egg:
 	make clean
-	(cd src/athena2pyspark; zip -r ./../../athena2pyspark.egg *)
+	(cd src; zip -r ./../athena2pyspark.egg *)
 
 	
 
