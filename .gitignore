@@ -11,3 +11,5 @@ dist/
 awsglue.egg
 venv/
 "\033"
+athena2pyspark.egg
+athena2pyspark.zip
