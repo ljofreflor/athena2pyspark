@@ -64,7 +64,9 @@ paths = {
     "listado": "s3://cencosud.exalitica.com/prod/{flag}/listado/",
     "up_sell":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/up_sell/",
     "cross_sell":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/cross_sell/",
-    "sensibilidad_precio":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/sensibilidad_precio/"
+    "sensibilidad_precio":  "s3://cencosud.exalitica.com/prod/{flag}/dinamicas/sensibilidad_precio/",
+    "templ":  "s3://cencosud.exalitica.com/prod/{flag}/auxiliares/templ/",
+    "mc":  "s3://cencosud.exalitica.com/prod/{flag}/auxiliares/mc/"
 }
 
 partition_by = {
@@ -95,6 +97,8 @@ partition_by = {
     "prepriorizacion": ['col2', 'col1'],
     "listado": [],
     "sensibilidad_precio": [],
-    "up_sell": []
+    "up_sell": [],
+    "templ": [],
+    "mc": []
 
 }
