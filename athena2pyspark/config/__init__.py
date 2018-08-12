@@ -4,23 +4,19 @@ Created on 29-11-2017
 @author: lnjofre
 '''
 
-import os
-import boto3
-
 
 def get_spark_session(args, aws_access_key_id=None, aws_secret_access_key=None):
-
-    if (aws_access_key_id is None) or (aws_secret_access_key is None):
-        aws_access_key_id = 'AKIAJYICQU2XCXFLACWA'
-        aws_secret_access_key = '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'
-
+    import os
+    import boto3
     from pyspark.context import SparkContext
     from pyspark.sql.context import SQLContext
     from pyspark.sql.session import SparkSession
-    from awsglue.context import GlueContext
+
+    if (aws_access_key_id is None) or (aws_secret_access_key is None) and args['mode'] == "local":
+        aws_access_key_id = 'AKIAJJ3QVXBBL4ZDQHEQ'
+        aws_secret_access_key = '+XxkZE3vY2p6IkItaoGzJE2+UsTPmY36udmqA73sC'
 
     if args['mode'] == "local":
-
         os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.hadoop:hadoop-aws:2.7.3 pyspark-shell'
         spark = SparkSession.builder.master("local").getOrCreate()
         spark.conf.set("fs.s3n.awsAccessKeyId", aws_access_key_id)
@@ -33,7 +29,7 @@ def get_spark_session(args, aws_access_key_id=None, aws_secret_access_key=None):
         spark._jsc.hadoopConfiguration().set("fs.s3n.secret.key", aws_secret_access_key)
 
     elif args['mode'] == "glue":
-
+        from awsglue.context import GlueContext
         sc = SparkContext().getOrCreate()
         glueContext = GlueContext(sc)
         spark = glueContext.spark_session
