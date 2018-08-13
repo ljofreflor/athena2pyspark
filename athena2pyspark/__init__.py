@@ -13,90 +13,26 @@ import time
 from urlparse import urlparse
 import zipfile
 
-import boto3
-#from py4j.protocol import Py4JJavaError
-#import pyspark
-#from pyspark.sql import dataframe
-#from pyspark.sql.utils import AnalysisException
-
 from athena2pyspark.config import get_spark_session
+import boto3
+from utils import deprecated
 
 
-def _run_query(query, database, s3_output):
-    aws_access_key_id = "AKIAJYICQU2XCXFLACWA"
-    aws_secret_access_key = "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"
-    athena = boto3.client('athena', region_name='us-east-1',
-                          aws_access_key_id=aws_access_key_id,
-                          aws_secret_access_key=aws_secret_access_key)
+class athenaReader(object):
+    def __init__(self):
+        pass
 
-    s3 = boto3.client('s3', region_name='us-east-1',
-                      aws_access_key_id=aws_access_key_id,
-                      aws_secret_access_key=aws_secret_access_key)
-
-    response = athena.start_query_execution(
-        QueryString=query,
-        QueryExecutionContext={
-            'Database': database
-        },
-        ResultConfiguration={
-            'OutputLocation': s3_output,
-        }
-    )
-    print('Execution ID: ' + response['QueryExecutionId'])
-    query_id = response['QueryExecutionId']
-    status = 'RUNNING'
-    while status != 'SUCCEEDED':
-        status = athena.get_query_execution(QueryExecutionId=query_id)[
-            'QueryExecution']['Status']['State']
-        assert(status != 'FAILED')
-        assert(status != 'CANCELLED')
-        time.sleep(5)
-
-    file_path = s3_output + response['QueryExecutionId'] + '.csv'
-    metadata_file_path = file_path + '.metadata'
-
-    # patron para extraer el nombre del bucket
-    bucket_pttrn = re.compile(r"s3://[^/]+/")
-
-    Bucket = bucket_pttrn.findall(metadata_file_path)[
-        0].replace("s3://", "").replace("/", "")
-    Key = metadata_file_path.replace(
-        bucket_pttrn.findall(metadata_file_path)[0], "")
-    s3.delete_object(Bucket=Bucket, Key=Key)
-
-    return file_path
+    def athena(self, query):
+        from pyspark.sql.readwriter import DataFrameReader
+        pass
 
 
-def _queryByName(query_file_name, sql_path, args=None):
-    '''
-    este es un ejemplo
-    :param query_file_name:
-    :param args: diccionario con los parametros de la query
-    '''
+class AthenaContext(object):
+    def __init__(self, spark):
+        self.spark = spark
 
-    try:
-        # version local de la libreria
-        mop_base = os.path.join(sql_path, "sql", query_file_name + ".sql")
-        sql_file = open(mop_base, "r").read()
-    except IOError:
-        # version zip de la libreria
-        try:
-            zf = zipfile.ZipFile(sql_path)
-            sql_file = zf.open(os.path.join(
-                sql_path, query_file_name + ".sql")).read()
-        except IOError:
-            # version egg de la libreria
-            basename = os.path.basename(sql_path)
-            sql_path = re.sub(".egg/.*", ".egg", sql_path)
-            zf = zipfile.ZipFile(sql_path)
-            sql_file = zf.open(os.path.join(basename,
-                                            'sql',
-                                            query_file_name + ".sql")).read()
-
-    if args is not None:
-        sql_file = sql_file.format(**args)
-
-    return sql_file
+    def read(self):
+        pass
 
 
 class athena2pyspark(object):
@@ -113,6 +49,7 @@ class athena2pyspark(object):
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_access_key = aws_secret_access_key
 
+    @deprecated(reason="las credenciales deben pasarse por medio del sparkSession")
     def set_credentials(self, aws_secret_access_key, aws_access_key_id):
         self.aws_secret_access_key = aws_secret_access_key
         self.aws_access_key_id = aws_access_key_id
@@ -147,19 +84,6 @@ class athena2pyspark(object):
             sql_file = sql_file.format(**args)
 
         return sql_file
-
-    def get_query_from_app(self, cell_list, spark, param):
-        # leer la matriz de configuracion
-        database = "prod_{flag}".format(**param)
-        query = "select distinct "
-        matriz_de_configuracion = self.queryByName(
-            "sql/matriz_de_configuracion", args=param)
-
-        matriz_de_configuracion_df = self.run_query(query=matriz_de_configuracion,
-                                                    database=database,
-                                                    s3_output=self.result_folder,
-                                                    spark=spark)
-        pass
 
     def get_dataframe(self, path_query):
         u"""por alguna razon desconocida glue no acepta el protocolo s3n, por otra razon las aplicaciones
@@ -281,6 +205,7 @@ class athena2pyspark(object):
 
         return result_dict
 
+    @deprecated("no es necesario crear tablas al vuelo, puede usar las vistas de athena")
     def get_ddl(self, df, database, table, s3_input):
         columns = df.columns
         # lo pasamos a pandas pero no traemos nada, simplemente generamos este array vacio
