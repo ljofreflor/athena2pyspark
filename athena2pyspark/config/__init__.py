@@ -5,6 +5,11 @@ Created on 29-11-2017
 '''
 
 
+class AthenaContext(object):
+    def __init__(self, sparkContext):
+        raise NotImplementedError
+
+
 def get_spark_session(args, aws_access_key_id=None, aws_secret_access_key=None):
     import os
     import boto3
