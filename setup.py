@@ -1,7 +1,7 @@
 import setuptools
 
 with open("README.md", "r") as fh:
-    long_description = "description" #fh.read().decode('unicode-escape')
+    long_description = "description"  # fh.read().decode('unicode-escape')
 
 setuptools.setup(
     name="athena2pyspark",
@@ -12,5 +12,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
-    install_requires = ["pyspark","boto3"]
+    install_requires=["pyspark", "boto3"]
 )
+
+# instalador
+# python setup.py sdist bdist_wheel
+# twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
