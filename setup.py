@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="athena2pyspark",
-    version="0.0.3",
+    version="0.0.4",
     author="Leonardo Jofre",
     author_email="ljofre2146@gmail.com",
     description="consumir athena desde spark",
