@@ -16,3 +16,6 @@ athena2pyspark.egg
 athena2pyspark.zip
 README.ipynb
 venv
+.vscode
+athena2pyspark/.DS_Store
+.DS_Store

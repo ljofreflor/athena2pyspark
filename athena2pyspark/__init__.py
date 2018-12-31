@@ -5,7 +5,9 @@ Created on 24-10-2017
 '''
 # TODO: implementar coverade de la libreria
 # TODO: implementar ambientes de la libreria
+# TODO: probar en python3.7
 
+import ConfigParser
 from exceptions import UnboundLocalError
 import os.path
 import re
@@ -15,6 +17,7 @@ import zipfile
 
 from athena2pyspark.config import get_spark_session
 import boto3
+
 from utils import deprecated
 
 
@@ -39,6 +42,14 @@ class athena2pyspark(object):
 
     def __init__(self):
         pass
+
+    def set_profile(self, profile):
+
+        Config = ConfigParser.ConfigParser()
+        Config.read(os.environ['HOME'] + "/.aws/credentials")
+        self.aws_access_key_id = Config.get(profile, "aws_access_key_id")
+        self.aws_secret_access_key = Config.get(
+            profile, "aws_secret_access_key")
 
     def set_spark_session(self, spark):
         self.spark = spark
