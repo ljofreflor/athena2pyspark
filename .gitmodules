@@ -1,3 +1,0 @@
-[submodule "athena2pyspark/athena_sql/mop-glue"]
-	path = athena2pyspark/athena_sql/mop-glue
-	url = git@bitbucket.org:exalitica-team/mop-glue.git
