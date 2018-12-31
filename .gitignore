@@ -13,3 +13,5 @@ venv/
 "\033"
 athena2pyspark.egg
 athena2pyspark.zip
+.DS_Store
+.vscode
