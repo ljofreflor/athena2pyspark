@@ -2,6 +2,8 @@
 athena2pyspark
 ==
 
+Serverless big data tools to beautiful data scientist and lazy unicorns.
+
 ## Instalación
 ```
 pip install --upgrade git+http://git@github.com/ljofre/aws-athena-tools.git@master
