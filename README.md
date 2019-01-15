@@ -8,8 +8,10 @@ pip install --upgrade git+http://git@github.com/ljofre/aws-athena-tools.git@mast
 ```
 
 ## Zip file to AWS Glue
+
 ```
-https://github.com/ljofre/aws-athena-tools/archive/master.zip
+wget https://github.com/ljofre/aws-athena-tools/archive/master.zip site-packages.zip
+aws s3 cp site-packages.zip s3://bucket/prefix/site-packages.zip
 ```
 
 todo list
