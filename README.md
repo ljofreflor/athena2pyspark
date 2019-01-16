@@ -19,7 +19,7 @@ aws s3 cp site-packages.zip s3://bucket/prefix/site-packages.zip
 todo list
 
 - [x] Leer credenciales desde el archivo init de ~/.aws
-- [] Integrar con roles aws
+- [x] Integrar con roles aws
 - [] Integrar con serverless
 - [] Compatibilidad python3.7
 - [] Dockerfile con pruebas unitarias
