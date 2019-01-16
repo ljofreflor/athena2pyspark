@@ -36,3 +36,4 @@ venv
 .vscode
 athena2pyspark/.DS_Store
 .DS_Store
+Pipfile*

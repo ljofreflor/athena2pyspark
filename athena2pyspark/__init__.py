@@ -53,12 +53,17 @@ class athena2pyspark(object):
 
     def set_spark_session(self, spark):
         self.spark = spark
-        aws_access_key_id = self.spark.conf.get("fs.s3n.awsAccessKeyId")
-        aws_secret_access_key = self.spark.conf.get(
-            "fs.s3n.awsSecretAccessKey")
 
-        self.aws_access_key_id = aws_access_key_id
-        self.aws_secret_access_key = aws_secret_access_key
+        try:
+            aws_access_key_id = self.spark.conf.get("fs.s3n.awsAccessKeyId")
+            aws_secret_access_key = self.spark.conf.get(
+                "fs.s3n.awsSecretAccessKey")
+
+            self.aws_access_key_id = aws_access_key_id
+            self.aws_secret_access_key = aws_secret_access_key
+        except:
+            # en Rol no existen las credenciales asi que pasamos de largo
+            pass
 
     @deprecated(reason="las credenciales deben pasarse por medio del sparkSession")
     def set_credentials(self, aws_secret_access_key, aws_access_key_id):
@@ -149,13 +154,20 @@ class athena2pyspark(object):
 
     def run_query(self, query, database, s3_output):
 
-        athena = boto3.client('athena', region_name='us-east-1',
-                              aws_access_key_id=self.aws_access_key_id,
-                              aws_secret_access_key=self.aws_secret_access_key)
+        try:
+            athena = boto3.client('athena', region_name='us-east-1',
+                                aws_access_key_id=self.aws_access_key_id,
+                                aws_secret_access_key=self.aws_secret_access_key)
 
-        s3 = boto3.client('s3', region_name='us-east-1',
-                          aws_access_key_id=self.aws_access_key_id,
-                          aws_secret_access_key=self.aws_secret_access_key)
+            s3 = boto3.client('s3', region_name='us-east-1',
+                            aws_access_key_id=self.aws_access_key_id,
+                            aws_secret_access_key=self.aws_secret_access_key)
+        except AttributeError:
+            # si no existen credenciales se esta ejecutando por Rol de AWS
+            athena = boto3.client('athena', region_name='us-east-1')
+
+            s3 = boto3.client('s3', region_name='us-east-1')
+
 
         response = athena.start_query_execution(
             QueryString=query,
