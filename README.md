@@ -9,17 +9,10 @@ Serverless big data tools to beautiful data scientist and lazy unicorns.
 pip install --upgrade git+http://git@github.com/ljofre/aws-athena-tools.git@master
 ```
 
-## Zip file to AWS Glue
-
-```
-git clone git+http://git@github.com/ljofre/aws-athena-tools.git@master
-
-```
-
 todo list
 
 - [x] Leer credenciales desde el archivo init de ~/.aws
-- [] Integrar con roles aws
+- [x] Integrar con roles aws
 - [] Integrar con serverless
 - [] Compatibilidad python3.7
 - [] Dockerfile con pruebas unitarias
