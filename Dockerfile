@@ -8,6 +8,3 @@ RUN apt-get install zip -yq
 COPY ./athena2pyspark athena2pyspark
 
 CMD cd /athena2pyspark; zip athena2pyspark.zip ./*; mv athena2pyspark.zip /athena2pyspark.zip
-
-
-

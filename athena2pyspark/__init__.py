@@ -21,27 +21,15 @@ import boto3
 from utils import deprecated
 
 
-class athenaReader(object):
-    def __init__(self):
-        pass
-
-    def athena(self, query):
-        from pyspark.sql.readwriter import DataFrameReader
-        pass
-
-
-class AthenaContext(object):
-    def __init__(self, spark):
-        self.spark = spark
-
-    def read(self):
-        pass
 
 
 class athena2pyspark(object):
 
     def __init__(self):
         pass
+
+    def set_region_name(self, region_name):
+        self.region_name = region_name
 
     def set_profile(self, profile):
 
@@ -117,11 +105,11 @@ class athena2pyspark(object):
 
     def run_create_table(self, query, database, s3_output):
         athena = boto3.client('athena',
-                              region_name='us-east-1',
+                              region_name=self.region_name,
                               aws_access_key_id=self.aws_access_key_id,
                               aws_secret_access_key=self.aws_secret_access_key)
 
-        s3 = boto3.client('s3', region_name='us-east-1',
+        s3 = boto3.client('s3', region_name=self.region_name,
                           aws_access_key_id=self.aws_access_key_id,
                           aws_secret_access_key=self.aws_secret_access_key)
 
@@ -155,18 +143,18 @@ class athena2pyspark(object):
     def run_query(self, query, database, s3_output):
 
         try:
-            athena = boto3.client('athena', region_name='us-east-1',
+            athena = boto3.client('athena', region_name=self.region_name,
                                 aws_access_key_id=self.aws_access_key_id,
                                 aws_secret_access_key=self.aws_secret_access_key)
 
-            s3 = boto3.client('s3', region_name='us-east-1',
+            s3 = boto3.client('s3', region_name=self.region_name,
                             aws_access_key_id=self.aws_access_key_id,
                             aws_secret_access_key=self.aws_secret_access_key)
         except AttributeError:
             # si no existen credenciales se esta ejecutando por Rol de AWS
-            athena = boto3.client('athena', region_name='us-east-1')
+            athena = boto3.client('athena', region_name=self.region_name)
 
-            s3 = boto3.client('s3', region_name='us-east-1')
+            s3 = boto3.client('s3', region_name=self.region_name)
 
 
         response = athena.start_query_execution(
@@ -203,7 +191,7 @@ class athena2pyspark(object):
         return file_path
 
     def get_json(self, file_path):
-        s3 = boto3.resource('s3', region_name='us-east-1',
+        s3 = boto3.resource('s3', region_name=self.region_name,
                             aws_access_key_id=self.aws_access_key_id,
                             aws_secret_access_key=self.aws_secret_access_key)
 
@@ -249,7 +237,7 @@ class athena2pyspark(object):
         return create_database, create_table
 
     def get_create_table(self, query):
-        client = boto3.client('athena', region_name='us-east-1',
+        client = boto3.client('athena', region_name=self.region_name,
                               aws_access_key_id=self.aws_access_key_id,
                               aws_secret_access_key=self.aws_secret_access_key)
 
