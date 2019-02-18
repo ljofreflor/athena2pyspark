@@ -7,7 +7,7 @@ Created on 24-10-2017
 # TODO: implementar ambientes de la libreria
 # TODO: probar en python3.7
 
-import ConfigParser
+
 import os.path
 import re
 import time
@@ -29,7 +29,7 @@ class athena2pyspark(object):
         self.region_name = region_name
 
     def set_profile(self, profile):
-
+        import ConfigParser
         Config = ConfigParser.ConfigParser()
         Config.read(os.environ['HOME'] + "/.aws/credentials")
         self.aws_access_key_id = Config.get(profile, "aws_access_key_id")
