@@ -5,12 +5,11 @@ Created on 24-10-2017
 '''
 # TODO: implementar coverade de la libreria
 # TODO: implementar ambientes de la libreria
-# TODO: probar en python3.7
+# TODO: probar en python3.6
 
 
 import os.path
 import re
-import time
 
 try:
     from urlparse import urlparse
