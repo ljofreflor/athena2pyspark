@@ -8,7 +8,6 @@ Created on 24-10-2017
 # TODO: probar en python3.7
 
 import ConfigParser
-from exceptions import UnboundLocalError
 import os.path
 import re
 import time
@@ -19,8 +18,6 @@ from athena2pyspark.config import get_spark_session
 import boto3
 
 from utils import deprecated
-
-
 
 
 class athena2pyspark(object):
