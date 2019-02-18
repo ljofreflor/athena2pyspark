@@ -10,7 +10,7 @@ Created on 24-10-2017
 
 import os.path
 import re
-
+import time
 try:
     from urlparse import urlparse
 except ModuleNotFoundError:
