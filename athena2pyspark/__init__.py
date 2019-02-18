@@ -11,7 +11,12 @@ Created on 24-10-2017
 import os.path
 import re
 import time
-from urlparse import urlparse
+
+try:
+    from urlparse import urlparse
+except ModuleNotFoundError:
+    import urllib.parse as urlparse
+
 import zipfile
 
 from athena2pyspark.config import get_spark_session
