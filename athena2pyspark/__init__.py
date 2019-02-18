@@ -22,7 +22,7 @@ import zipfile
 from athena2pyspark.config import get_spark_session
 import boto3
 
-from utils import deprecated
+from custom_utils import deprecated
 
 
 class athena2pyspark(object):
