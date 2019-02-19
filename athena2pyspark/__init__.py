@@ -10,7 +10,6 @@ Created on 24-10-2017
 
 import os.path
 import re
-import time
 
 try:
     from urlparse import urlparse
@@ -176,7 +175,6 @@ class athena2pyspark(object):
                 'QueryExecution']['Status']['State']
             assert(status != 'FAILED')
             assert(status != 'CANCELLED')
-            time.sleep(5)
 
         file_path = s3_output + response['QueryExecutionId'] + '.csv'
         metadata_file_path = file_path + '.metadata'
