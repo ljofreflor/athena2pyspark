@@ -11,6 +11,7 @@ Created on 24-10-2017
 import os.path
 import re
 import time
+
 try:
     from urlparse import urlparse
 except ModuleNotFoundError:
@@ -142,7 +143,7 @@ class athena2pyspark(object):
         return file_path
 
     def run_query(self, query, database, s3_output):
-
+        import time
         try:
             athena = boto3.client('athena', region_name=self.region_name,
                                 aws_access_key_id=self.aws_access_key_id,
