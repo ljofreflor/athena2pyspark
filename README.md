@@ -9,12 +9,6 @@ Serverless big data tools to beautiful data scientist and lazy unicorns.
 pip install --upgrade git+http://git@github.com/ljofre/aws-athena-tools.git@master
 ```
 
-todo list
+## changelog 24-02-2019
 
-- [x] Leer credenciales desde el archivo init de ~/.aws
-- [x] Integrar con roles aws
-- [] Integrar con serverless
-- [] Compatibilidad python3.7
-- [] Dockerfile con pruebas unitarias
-- [] Carpeta de ejemplos
-- [] Construccion de querys con django o sqlalchemys
+- we're include python 3.6 compatibility and region parameter for athena
