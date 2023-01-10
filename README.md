@@ -2,13 +2,13 @@
 athena2pyspark
 ==
 
-Serverless big data tools to beautiful data scientist and lazy unicorns.
+A library that allows you to execute queries in AWS Athena and obtain the results as a lazy DataFrame in PySpark.
 
-## Instalación
-```
-pip install --upgrade git+http://git@github.com/jofre-lab/athena2pyspark.git@master
-```
+## Features
 
-## changelog 24-02-2019
+* Connect to Athena query results and manipulate the data using PySpark functions and APIs
+* Easy to use - can be run on a local computer
+* No need to set up a separate Spark cluster or deal with complex configuration
+## Maintainer
 
-- we're include python 3.6 compatibility and region parameter for athena
+Leonardo Andrés Jofré Flor (ljofre2146@gmail.com)
